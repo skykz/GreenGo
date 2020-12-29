@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "128312768703",
+    "project_id": "greengo-abd23",
+    "storage_bucket": "greengo-abd23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128312768703:android:ef9f875edf116d0f0bae0a",
+        "android_client_info": {
+          "package_name": "kz.project.green_go"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128312768703-3uok772i1dmb935s8hso85r4cva98ttt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kz.project.green_go",
+            "certificate_hash": "99c00d92c52d3106285fcb0fdc031aac005ef0d5"
+          }
+        },
+        {
+          "client_id": "128312768703-j91481eoe9iub05sntvj7e868a0sc925.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kz.project.green_go",
+            "certificate_hash": "37352e56e7a2bde662f16e19383bd098d1fd0d63"
+          }
+        },
+        {
+          "client_id": "128312768703-abaqbrc78nmchoci1gmai2haiiba3eju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjB8cEdpoSUPnwZ6hxyEluvXQji_sj9_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128312768703-abaqbrc78nmchoci1gmai2haiiba3eju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

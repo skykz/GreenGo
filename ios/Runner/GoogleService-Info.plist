@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>128312768703-51si2hb7hu6rnrt39df34q39flb6c0tf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.128312768703-51si2hb7hu6rnrt39df34q39flb6c0tf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>128312768703-3uok772i1dmb935s8hso85r4cva98ttt.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCN5MdBbvQS1692J0ob8G4pY0SVHOBWHYk</string>
+	<key>GCM_SENDER_ID</key>
+	<string>128312768703</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kz.project.greengo</string>
+	<key>PROJECT_ID</key>
+	<string>greengo-abd23</string>
+	<key>STORAGE_BUCKET</key>
+	<string>greengo-abd23.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:128312768703:ios:3ebbcfbc263c9c510bae0a</string>
+</dict>
+</plist>
