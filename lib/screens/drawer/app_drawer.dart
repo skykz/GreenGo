@@ -99,13 +99,16 @@ class AppDrawerScreen extends StatelessWidget {
                   ListCustomItem(
                     path: 'assets/images/svg/order.svg',
                     title: 'Заказы',
-                    onTapped: () {},
+                    onTapped: () {
+                      _selectItem(8, context);
+                      Navigator.pop(context);
+                    },
                   ),
                   ListCustomItem(
                     path: 'assets/images/svg/settings.svg',
                     title: 'Настройки',
                     onTapped: () {
-                      _selectItem(11, context);
+                      _selectItem(13, context);
                       Navigator.pop(context);
                     },
                   ),
@@ -113,7 +116,7 @@ class AppDrawerScreen extends StatelessWidget {
                     path: 'assets/images/svg/partner.svg',
                     title: 'Партнерам',
                     onTapped: () {
-                      _selectItem(13, context);
+                      _selectItem(15, context);
                       Navigator.pop(context);
                     },
                   ),
@@ -121,7 +124,7 @@ class AppDrawerScreen extends StatelessWidget {
                     path: 'assets/images/svg/support.svg',
                     title: 'Помощь',
                     onTapped: () {
-                      _selectItem(12, context);
+                      _selectItem(14, context);
                       Navigator.pop(context);
                     },
                   ),

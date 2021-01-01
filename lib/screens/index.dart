@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:green_go/components/styles/app_style.dart';
@@ -46,12 +45,14 @@ class _IndexScreenState extends State<IndexScreen> {
     ProfileScreen(),
     CreateProductScreen(),
     SearchScreen(),
+
     SingleOrderScreen(),
     ProductsScreen(),
     SingleProductScreen(),
     SingleHomeScreen(),
     FavoriteListScreen(),
-    SettingsScreen(),
+
+    SettingsScreen(), //13
     SupportScreen(),
     InfoPartnersScreen(),
   ];
@@ -59,8 +60,7 @@ class _IndexScreenState extends State<IndexScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((val) {
-      displayCustomDialog(
-          context, '_title', DialogType.AddressType, true, () {});
+      displayCustomDialog(context, '_title', DialogType.AuthType, true, () {});
       NotificationHandlerService().initializeFcmNotification();
     });
     super.initState();

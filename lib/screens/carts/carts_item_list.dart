@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:green_go/screens/products/products_new_screen.dart';
+import 'package:green_go/screens/products/products_list_screen.dart';
 import 'package:sizer/sizer.dart';
 
-class CartsItemScreen extends StatelessWidget {
-  const CartsItemScreen({Key key}) : super(key: key);
+class CartsHistoryItemScreen extends StatelessWidget {
+  const CartsHistoryItemScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,8 @@ class CartsItemScreen extends StatelessWidget {
       length: 2,
       child: Column(
         children: [
-          Padding(
+          Container(
+            color: Colors.white,
             padding: const EdgeInsets.only(top: 10),
             child: TabBar(
                 unselectedLabelColor: Colors.black87,
@@ -45,8 +46,8 @@ class CartsItemScreen extends StatelessWidget {
           ),
           Expanded(
             child: TabBarView(children: [
-              ProductNewScreen(),
-              ProductNewScreen(),
+              ProductListScreen(),
+              ProductListScreen(),
             ]),
           ),
         ],

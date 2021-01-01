@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/screens/products/products_new_screen.dart';
+import 'package:green_go/screens/products/products_list_screen.dart';
 import 'package:green_go/screens/products/products_status_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -100,7 +100,7 @@ class _ProductsScreenState extends State<ProductsScreen>
         controller: _tabController,
         children: [
           ProductsStatusScreen(),
-          ProductNewScreen(),
+          ProductListScreen(),
         ],
       ),
     );

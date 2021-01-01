@@ -1,10 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
+import 'package:green_go/core/data/dialog_type.dart';
+import 'package:green_go/utils/utils.dart';
 import 'package:sizer/sizer.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key key}) : super(key: key);
+
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isTrue = true;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +63,13 @@ class SettingsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text("PUSH-уведомления"),
-                            CupertinoSwitch(value: true, onChanged: (val) {})
+                            CupertinoSwitch(
+                                value: this._isTrue,
+                                onChanged: (val) {
+                                  setState(() {
+                                    this._isTrue = val;
+                                  });
+                                })
                           ],
                         )
                       ],
@@ -185,7 +200,12 @@ class SettingsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  displayCustomDialog(context, '', DialogType.AddressType, true,
+                      () {
+                    Navigator.pop(context);
+                  });
+                },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),

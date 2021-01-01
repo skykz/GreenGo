@@ -18,6 +18,7 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
   final _textSearcTextController1 = TextEditingController();
   final _textSearcTextController2 = TextEditingController();
   List<PickedFile> _imageFile = List();
+  bool isChecked = false;
   final ImagePicker _picker = ImagePicker();
 
   @override
@@ -84,8 +85,8 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                               horizontal: 20, vertical: 5),
                           child: Center(
                             child: Container(
-                              height: 14.0.h,
-                              width: 25.0.w,
+                              height: 100,
+                              width: 100,
                               decoration: BoxDecoration(
                                 color: Colors.grey[400],
                                 borderRadius: BorderRadius.circular(20),
@@ -248,13 +249,25 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                           ),
                           Row(
                             children: [
-                              Checkbox(value: true, onChanged: (v) {}),
+                              Checkbox(
+                                  value: isChecked,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      isChecked = v;
+                                    });
+                                  }),
                               Text("Самовывозом"),
                             ],
                           ),
                           Row(
                             children: [
-                              Checkbox(value: true, onChanged: (v) {}),
+                              Checkbox(
+                                  value: !isChecked,
+                                  onChanged: (v) {
+                                    setState(() {
+                                      isChecked = v;
+                                    });
+                                  }),
                               Text("Возможна доставка"),
                             ],
                           )

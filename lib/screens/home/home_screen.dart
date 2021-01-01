@@ -3,16 +3,41 @@ import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/components/widgets/anim_slider.dart';
 import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/screens/home/single_home.dart';
+import 'package:green_go/screens/home/single_product.dart';
 import 'package:sizer/sizer.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (BuildContext context) {
+              switch (settings.name) {
+                case '/singleCatalogHome':
+                  return SingleHomeScreen();
+                default:
+                  return HomeWidget();
+                  break;
+              }
+            });
+      },
+    );
+  }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeWidget extends StatefulWidget {
+  const HomeWidget({Key key}) : super(key: key);
+
+  @override
+  _HomeWidgetState createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
   ScrollController _scrollController;
 
   @override
@@ -25,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-
     return Container(
       child: SingleChildScrollView(
         child: Column(
@@ -54,13 +78,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      childAspectRatio: w / (h / 2),
+                      childAspectRatio: w / (h / 2.2),
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.all(10),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SingleHomeScreen(),
+                              ),
+                            );
+                          },
                           borderRadius: BorderRadius.circular(8),
                           child: Ink(
                             decoration: BoxDecoration(
@@ -83,8 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   imageBuilder: (context, imageProvider) =>
                                       Center(
                                     child: Container(
-                                      width: 19.0.w,
-                                      height: 10.0.h,
+                                      width: 65,
+                                      height: 65,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(50),
                                         image: DecorationImage(
@@ -146,7 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.all(8),
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(8),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            SingleProductScreen(),
+                                      ),
+                                    );
+                                  },
                                   child: Ink(
                                     width: 45.0.w,
                                     padding: const EdgeInsets.symmetric(
@@ -175,8 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               (context, imageProvider) =>
                                                   Center(
                                             child: Container(
-                                              width: 21.0.w,
-                                              height: 11.0.h,
+                                              width: 85,
+                                              height: 85,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(50),
@@ -232,12 +271,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               Positioned(
                                 right: 0,
                                 top: 0,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.favorite_outline_rounded,
-                                    color: AppStyle.colorPurple,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      Icons.favorite_outline_rounded,
+                                      color: AppStyle.colorPurple,
+                                    ),
+                                    onPressed: () {},
                                   ),
-                                  onPressed: () {},
                                 ),
                               )
                             ],
@@ -310,7 +352,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(10),
                           child: InkWell(
                             borderRadius: BorderRadius.circular(8),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SingleProductScreen(),
+                                ),
+                              );
+                            },
                             child: Ink(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -333,8 +382,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     imageBuilder: (context, imageProvider) =>
                                         Center(
                                       child: Container(
-                                        width: 19.0.w,
-                                        height: 10.0.h,
+                                        width: 80,
+                                        height: 80,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(50),
@@ -370,12 +419,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         Positioned(
                           right: 3,
                           top: 3,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.favorite_outline_rounded,
-                              color: AppStyle.colorPurple,
+                          child: Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.favorite_outline_rounded,
+                                color: AppStyle.colorPurple,
+                              ),
+                              onPressed: () {},
                             ),
-                            onPressed: () {},
                           ),
                         )
                       ],

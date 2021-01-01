@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/screens/feedbacks/create_feedback.dart';
+import 'package:green_go/screens/home/single_product.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -13,6 +15,32 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Navigator(
+      onGenerateRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (BuildContext context) {
+              switch (settings.name) {
+                case '/viewFeedBacks':
+                  return CreateFeedbackScreen(
+                    isView: true,
+                  );
+                case '/singleProduct':
+                  return SingleProductScreen();
+                default:
+                  return SearchListItems();
+                  break;
+              }
+            });
+      },
+    );
+  }
+}
+
+class SearchListItems extends StatelessWidget {
+  SearchListItems({Key key}) : super(key: key);
   final _textSearcTextController = TextEditingController();
 
   @override
@@ -88,7 +116,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     children: [
                       InkWell(
                         borderRadius: BorderRadius.circular(10),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SingleProductScreen(),
+                            ),
+                          );
+                        },
                         child: Ink(
                           width: double.infinity,
                           height: 20.0.h,
