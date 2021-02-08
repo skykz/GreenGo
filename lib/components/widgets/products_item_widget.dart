@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:sizer/sizer.dart';
 
-import 'custom_loader.dart';
+import 'loader_widget.dart';
 
 class ProductsStatusList extends StatelessWidget {
   final bool isArchive;
@@ -35,20 +35,20 @@ class ProductsStatusList extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: SizedBox(
-                    height: 26.0.h,
+                    height: 27.0.h,
                     child: Row(
                       children: [
                         Flexible(
-                          flex: 2,
+                          flex: 3,
                           child: CachedNetworkImage(
                             imageUrl:
                                 'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
                             imageBuilder: (context, imageProvider) => Center(
                               child: Container(
-                                width: 22.0.w,
-                                height: 12.0.h,
+                                width: 100,
+                                height: 100,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(100),
                                   image: DecorationImage(
                                     image: imageProvider,
                                     fit: BoxFit.cover,
@@ -57,9 +57,7 @@ class ProductsStatusList extends StatelessWidget {
                               ),
                             ),
                             placeholder: (context, string) => Center(
-                              child: CustomProgressWidget(
-                                color: Colors.grey,
-                              ),
+                              child: LoaderWidget(),
                             ),
                             errorWidget: (context, url, error) => Container(
                               child: const Center(
@@ -81,38 +79,49 @@ class ProductsStatusList extends StatelessWidget {
                               Text(
                                 'Дата создания: 30.12.2020  17:00',
                                 style: TextStyle(
-                                  fontSize: 10.0.sp,
+                                  fontSize: 8.0.sp,
                                 ),
                               ),
-                              Text(
-                                'Королевские розы',
-                                style: TextStyle(
-                                  fontSize: 14.0.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Красивые и нежные розочки',
-                                style: TextStyle(
-                                  fontSize: 12.0.sp,
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Способ отправки:\n",
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Text(
+                                  'Королевские розы'.toUpperCase(),
                                   style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 10.0.sp,
+                                    fontSize: 13.0.sp,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: "Самовывоз или Досатвкой",
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 12.0.sp,
-                                      ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 3),
+                                child: Text(
+                                  'Красивые и нежные розочки',
+                                  style: TextStyle(
+                                    fontSize: 11.0.sp,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "Способ отправки:\n",
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 9.0.sp,
                                     ),
-                                  ],
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: "Самовывоз или Досатвкой",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10.0.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Text(
@@ -126,14 +135,14 @@ class ProductsStatusList extends StatelessWidget {
                                   text: "Статус: ",
                                   style: TextStyle(
                                     color: AppStyle.colorGreen,
-                                    fontSize: 11.0.sp,
+                                    fontSize: 10.0.sp,
                                   ),
                                   children: <TextSpan>[
                                     TextSpan(
                                       text: "Активен",
                                       style: TextStyle(
                                         color: AppStyle.colorGreen,
-                                        fontSize: 12.0.sp,
+                                        fontSize: 11.0.sp,
                                       ),
                                     ),
                                   ],
@@ -166,10 +175,14 @@ class ProductsStatusList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
-                      child: Text(
-                        'Отменить товар',
-                        style: TextStyle(
-                          color: AppStyle.colorPurple,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Text(
+                          'Отменить товар'.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 10.0.sp,
+                            color: AppStyle.colorPurple,
+                          ),
                         ),
                       ),
                     ),

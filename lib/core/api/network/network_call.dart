@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:green_go/core/data/dialog_type.dart';
+import 'package:green_go/utils/utils.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
-const BASE_URL = 'greengo.dev.renova.st/api/';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const BASE_URL = 'https://api.greengo.dev.renova.st/api/v1/';
 
 class NetworkCall {
   // next three lines makes this class a Singleton
@@ -26,9 +30,12 @@ class NetworkCall {
       Map<String, dynamic> body,
       FormData formData}) async {
     BaseOptions options = BaseOptions(
-        baseUrl: BASE_URL, //base server url
-        method: method,
-        contentType: ContentType.parse("application/json").value);
+      headers: {'Accept': 'application/json'},
+      baseUrl: BASE_URL, //base server url
+
+      method: method,
+      contentType: 'application/json',
+    );
 
     Dio dio = Dio(options);
     Response response;
@@ -37,12 +44,13 @@ class NetworkCall {
       response =
           await dio.request(path, queryParameters: requestParams, data: body);
 
-      // log(" - Response - ", name: " api route -- $path");
-      // print(' ==== RESPONSE: $response');
+      log(" - Response - ", name: " api route -- $path");
+      print(' ==== RESPONSE: $response');
 
       _decodedRes = _decoder.convert(response.toString());
       return _decodedRes;
     } on DioError catch (error) {
+      inspect(error);
       handleError(error, context);
     }
   }
@@ -55,11 +63,15 @@ class NetworkCall {
       Map<String, dynamic> body,
       bool isToken}) async {
     BaseOptions options;
-
+    SharedPreferences _shared = await SharedPreferences.getInstance();
+    inspect(_shared.getString('accessToken'));
     options = BaseOptions(
       baseUrl: BASE_URL,
       method: method,
-      headers: {'Authorization': 'Bearer ' + "accessToken"},
+      headers: {
+        'Authorization': 'Bearer ' + _shared.getString('accessToken'),
+        'Accept': 'application/json'
+      },
       contentType: 'application/json',
     );
 
@@ -79,10 +91,14 @@ class NetworkCall {
 }
 
 /// handling avaiable cases from server
-void handleError(DioError error, BuildContext context) {
+Future<void> handleError(DioError error, BuildContext context) async {
   String errorDescription;
 
-  if (error is DioError) {
+  if (error.response.statusCode == 401) {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    _prefs.clear();
+    displayCustomDialog(context, '_title', DialogType.AuthType, true, () {});
+  } else if (error is DioError) {
     switch (error.type) {
       case DioErrorType.CANCEL:
         errorDescription = 'Запрос был отменен';
@@ -105,7 +121,9 @@ void handleError(DioError error, BuildContext context) {
 
         break;
       case DioErrorType.RESPONSE:
-        errorDescription = "Қате: " + error.response.data['error'];
+        errorDescription =
+            "Ошибка: " + error.response.data['data'].toString() ??
+                error.response.data['message'];
         print(errorDescription);
 
         break;

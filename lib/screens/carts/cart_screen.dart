@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
+import 'package:green_go/core/provider/home_provider.dart';
 import 'package:green_go/screens/carts/carts_item_list.dart';
 import 'package:green_go/screens/orders/single_order.dart';
 import 'package:green_go/screens/orders/single_order_create.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CartScreen extends StatelessWidget {
@@ -35,7 +37,9 @@ class CardMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvder = Provider.of<HomeProvider>(context);
     return DefaultTabController(
+      initialIndex: homeProvder.getSelectedIndex == 17 ? 1 : 0,
       length: 2,
       child: Column(
         children: [
@@ -86,10 +90,13 @@ class CardMainScreen extends StatelessWidget {
                 ]),
           ),
           Expanded(
-            child: TabBarView(children: [
-              _cartListWidget(context),
-              CartsHistoryItemScreen(),
-            ]),
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                _cartListWidget(context),
+                CartsHistoryItemScreen(),
+              ],
+            ),
           ),
         ],
       ),
@@ -100,7 +107,7 @@ class CardMainScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding:
-            const EdgeInsets.only(left: 20, right: 20, top: 35, bottom: 20),
+            const EdgeInsets.only(left: 15, right: 15, top: 35, bottom: 40),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
           decoration: BoxDecoration(
@@ -120,11 +127,16 @@ class CardMainScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Магазин: '),
+                    Text('Магазин: ',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 11.0.sp,
+                        )),
                     Text(
                       'Rosalie',
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 11.0.sp,
                       ),
                     ),
                   ],
@@ -132,7 +144,7 @@ class CardMainScreen extends StatelessWidget {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -141,7 +153,7 @@ class CardMainScreen extends StatelessWidget {
                         BoxShadow(
                           blurRadius: 7,
                           color: Colors.grey[300],
-                          offset: Offset(0, 5),
+                          offset: Offset(0, 3),
                         )
                       ]),
                   child: Column(
@@ -160,76 +172,88 @@ class CardMainScreen extends StatelessWidget {
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Text(
-                                    'Монобукет',
+                                    'монобукет'.toUpperCase(),
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 13.0.sp,
+                                      fontSize: 15.0.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    'Артикул: 000001',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 10.0.sp,
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      'Артикул: 000001',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10.0.sp,
+                                      ),
                                     ),
                                   ),
                                   Text(
                                     'sdfsdfsfsdfsdfsdfsfsdfsdfsdfsdf',
                                     maxLines: 5,
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Количество',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 5),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                              width: 1,
-                                            ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Количество',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 12.0.sp,
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 9),
-                                            child: Center(
-                                              child: Text(
-                                                '2',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 10.0.sp,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 7,
+                                                      horizontal: 11),
+                                              child: Center(
+                                                child: Text(
+                                                  '2',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 13.0.sp,
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
                             ),
                             Flexible(
-                              flex: 3,
+                              flex: 4,
                               child: CachedNetworkImage(
                                 imageUrl:
                                     'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
                                 imageBuilder: (context, imageProvider) =>
                                     Center(
                                   child: Container(
-                                    width: 90,
-                                    height: 90,
+                                    width: 110,
+                                    height: 110,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
+                                      borderRadius: BorderRadius.circular(100),
                                       image: DecorationImage(
                                         image: imageProvider,
                                         fit: BoxFit.cover,
@@ -238,9 +262,7 @@ class CardMainScreen extends StatelessWidget {
                                   ),
                                 ),
                                 placeholder: (context, string) => Center(
-                                  child: CustomProgressWidget(
-                                    color: Colors.grey,
-                                  ),
+                                  child: LoaderWidget(),
                                 ),
                                 errorWidget: (context, url, error) => Container(
                                   child: const Center(
@@ -269,7 +291,7 @@ class CardMainScreen extends StatelessWidget {
                             Text(
                               '26 000 тг.',
                               style: TextStyle(
-                                  fontSize: 13.0.sp,
+                                  fontSize: 14.0.sp,
                                   fontWeight: FontWeight.bold),
                             ),
                             FlatButton(
@@ -281,11 +303,14 @@ class CardMainScreen extends StatelessWidget {
                               splashColor: Colors.red[300],
                               onPressed: () {},
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 6),
                                 child: Text(
                                   'удалить',
                                   style: TextStyle(
-                                      fontSize: 11.0.sp, color: Colors.grey),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 11.0.sp,
+                                      color: Colors.grey),
                                 ),
                               ),
                             )
@@ -311,11 +336,12 @@ class CardMainScreen extends StatelessWidget {
                       ]),
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(15),
                       child: Text(
                         '40 000 тг.',
                         style: TextStyle(
-                          fontSize: 13.0.sp,
+                          fontSize: 14.0.sp,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -349,7 +375,7 @@ class CardMainScreen extends StatelessWidget {
                   },
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(12),
                       child: Text(
                         'ОФОРМИТЬ ЗАКАЗ',
                         style: TextStyle(
@@ -362,7 +388,7 @@ class CardMainScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 2.0.h,
+                height: 5.0.h,
               ),
             ],
           ),

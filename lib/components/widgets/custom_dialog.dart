@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/core/data/dialog_type.dart';
+import 'package:green_go/core/provider/home_provider.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomActionDialog extends StatefulWidget {
   final String title;
   final Function onPressed;
+  final BuildContext context;
   final String cancelOptionText;
   final DialogType dialogType;
   final Color color;
@@ -17,6 +21,7 @@ class CustomActionDialog extends StatefulWidget {
     @required this.onPressed,
     @required this.dialogType,
     this.color,
+    this.context,
     this.cancelOptionText,
     this.confirmOptionText,
   });
@@ -26,10 +31,10 @@ class CustomActionDialog extends StatefulWidget {
 }
 
 class _CustomActionDialogState extends State<CustomActionDialog> {
-  PageController _pageController = PageController();
-
   final _phoneValueController = MaskTextInputFormatter(
       mask: '+# (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
+  final _smsTextController = TextEditingController();
+  final _pinPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +50,28 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
   _setDialogType(DialogType dialogType) {
     switch (dialogType) {
       case DialogType.AuthType:
-        return SizedBox(
-          height: 75.0.h,
-          child: PageView(
-            controller: _pageController,
-            children: [
-              _setAuthView(),
-              _setRegisterView(),
-              _setPinCodeView(),
-              _setPinCodeViewForAuth(),
-              _setPinCodeViewWithForgot(),
-            ],
+        return Consumer<HomeProvider>(
+          builder: (context, value, child) => ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              height: 75.0.h,
+              child: Scaffold(
+                body: PageView(
+                  controller: value.getPageController,
+                  // physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    //login
+                    _setAuthView(value),
+                    //register
+                    _setRegisterView(value),
+                    _setPinCodeView(value),
+                    _setPinCodeViewForAuth(value),
+                    //login
+                    _setPinCodeViewWithForgot(value),
+                  ],
+                ),
+              ),
+            ),
           ),
         );
         break;
@@ -324,7 +340,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
     }
   }
 
-  _setAuthView() {
+  _setAuthView(HomeProvider _value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -382,24 +398,25 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: FlatButton(
-                  color: AppStyle.colorGreen,
-                  onPressed: () {
-                    _pageController.animateToPage(1,
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeIn);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        'ВОЙТИ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12.0.sp,
+                child: Builder(
+                  builder: (ctx) => FlatButton(
+                    color: AppStyle.colorGreen,
+                    onPressed: () {
+                      _value.setPhone(
+                          ctx, _phoneValueController.getUnmaskedText());
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          'ВОЙТИ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0.sp,
+                          ),
                         ),
                       ),
                     ),
@@ -417,7 +434,11 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
           ),
           FlatButton(
             color: AppStyle.colorPurple,
-            onPressed: () {},
+            onPressed: () {
+              _phoneValueController?.clear();
+              _value.getPageController.animateToPage(1,
+                  duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -439,7 +460,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
     );
   }
 
-  _setRegisterView() {
+  _setRegisterView(HomeProvider _value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -513,25 +534,30 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: FlatButton(
-              color: AppStyle.colorGreen,
-              onPressed: () {
-                _pageController.animateToPage(2,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'ЗАРЕГИСТРИРОВАТЬСЯ',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0.sp,
-                    ),
+            child: Builder(
+              builder: (ctx) => FlatButton(
+                color: AppStyle.colorGreen,
+                onPressed: !_value.getIsLoading
+                    ? () {
+                        _value.doRegisterByPhone(
+                            ctx, _phoneValueController.getUnmaskedText());
+                      }
+                    : () {},
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: _value.getIsLoading
+                        ? const LoaderWidget()
+                        : Text(
+                            'ЗАРЕГИСТРИРОВАТЬСЯ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0.sp,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -542,7 +568,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
     );
   }
 
-  _setPinCodeView() {
+  _setPinCodeView(HomeProvider _value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
@@ -575,6 +601,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
               textAlign: TextAlign.center,
               cursorWidth: 2,
               keyboardType: TextInputType.number,
+              controller: _smsTextController,
               decoration: InputDecoration(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -582,7 +609,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                   fontSize: 12.0.sp,
                   color: Colors.grey[400],
                 ),
-                hintText: 'КОД',
+                hintText: 'SMS КОД',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   gapPadding: 4,
@@ -608,25 +635,32 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: FlatButton(
-              color: AppStyle.colorGreen,
-              onPressed: () {
-                _pageController.animateToPage(3,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'ДАЛЕЕ',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0.sp,
-                    ),
+            child: Builder(
+              builder: (ctx) => FlatButton(
+                color: AppStyle.colorGreen,
+                onPressed: !_value.getIsLoading
+                    ? () {
+                        _value.confirmRegisterBySmsCode(
+                            ctx,
+                            _smsTextController.text,
+                            _phoneValueController.getUnmaskedText());
+                      }
+                    : () {},
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: _value.getIsLoading
+                        ? const LoaderWidget()
+                        : Text(
+                            'ДАЛЕЕ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0.sp,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -637,7 +671,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
     );
   }
 
-  _setPinCodeViewForAuth() {
+  _setPinCodeViewForAuth(HomeProvider _value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
@@ -660,6 +694,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
               textAlign: TextAlign.center,
               cursorWidth: 2,
               keyboardType: TextInputType.number,
+              controller: _pinPasswordController,
               decoration: InputDecoration(
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -693,25 +728,30 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: FlatButton(
-              color: AppStyle.colorGreen,
-              onPressed: () {
-                _pageController.animateToPage(4,
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeIn);
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'ДАЛЕЕ',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0.sp,
-                    ),
+            child: Builder(
+              builder: (ctx) => FlatButton(
+                color: AppStyle.colorGreen,
+                onPressed: _value.getIsLoading
+                    ? () {}
+                    : () {
+                        _value.changeAuthPassword(
+                            ctx, _pinPasswordController.text);
+                      },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: _value.getIsLoading
+                        ? const LoaderWidget()
+                        : Text(
+                            'ДАЛЕЕ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0.sp,
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -722,7 +762,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
     );
   }
 
-  _setPinCodeViewWithForgot() {
+  _setPinCodeViewWithForgot(HomeProvider _value) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
@@ -746,6 +786,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                   cursorRadius: Radius.circular(10.0),
                   textAlign: TextAlign.center,
                   cursorWidth: 2,
+                  controller: _pinPasswordController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     contentPadding:
@@ -792,23 +833,32 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
-            child: FlatButton(
-              color: AppStyle.colorGreen,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Text(
-                    'ДАЛЕЕ',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12.0.sp,
-                    ),
+            child: Builder(
+              builder: (ctx) => FlatButton(
+                color: AppStyle.colorGreen,
+                onPressed: _value.getIsLoading
+                    ? () {}
+                    : () {
+                        _value.doAuthLogin(
+                            ctx,
+                            _phoneValueController.getUnmaskedText(),
+                            _pinPasswordController.text);
+                      },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    child: _value.getIsLoading
+                        ? const LoaderWidget()
+                        : Text(
+                            'ДАЛЕЕ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12.0.sp,
+                            ),
+                          ),
                   ),
                 ),
               ),

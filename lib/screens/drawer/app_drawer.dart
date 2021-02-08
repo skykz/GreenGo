@@ -67,7 +67,7 @@ class AppDrawerScreen extends StatelessWidget {
                     path: 'assets/images/svg/shop.svg',
                     title: 'Магазины',
                     onTapped: () {
-                      _selectItem(1, context);
+                      _selectItem(16, context);
                       Navigator.pop(context);
                     },
                   ),
@@ -75,7 +75,7 @@ class AppDrawerScreen extends StatelessWidget {
                     path: 'assets/images/svg/catalog.svg',
                     title: 'Каталог',
                     onTapped: () {
-                      _selectItem(0, context);
+                      _selectItem(1, context);
                       Navigator.pop(context);
                     },
                   ),
@@ -100,7 +100,7 @@ class AppDrawerScreen extends StatelessWidget {
                     path: 'assets/images/svg/order.svg',
                     title: 'Заказы',
                     onTapped: () {
-                      _selectItem(8, context);
+                      _selectItem(17, context);
                       Navigator.pop(context);
                     },
                   ),

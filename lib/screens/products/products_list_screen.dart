@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/screens/orders/single_order.dart';
 import 'package:sizer/sizer.dart';
 
@@ -167,9 +167,7 @@ class ProductListScreen extends StatelessWidget {
                                           ),
                                           placeholder: (context, string) =>
                                               Center(
-                                            child: CustomProgressWidget(
-                                              color: Colors.grey,
-                                            ),
+                                            child: LoaderWidget(),
                                           ),
                                           errorWidget: (context, url, error) =>
                                               Container(

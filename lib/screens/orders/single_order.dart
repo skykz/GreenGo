@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
-import 'package:green_go/screens/feedbacks/create_feedback.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
+import 'package:green_go/screens/feedbacks/create_view_feedback.dart';
 import 'package:sizer/sizer.dart';
 
 class SingleOrderScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class SingleOrderScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_rounded,
-            size: 25.0.sp,
+            size: 20.0.sp,
             color: Colors.purple[400],
           ),
           onPressed: () => Navigator.pop(context),
@@ -29,96 +29,266 @@ class SingleOrderScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  'Заказ №0001',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0.sp,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 35),
+              SizedBox(
+                width: 72.0.w,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      '20.02.2020',
-                      style: TextStyle(
-                        fontSize: 11.0.sp,
-                        color: Colors.black87,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        'Заказ №0001',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0.sp,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      padding: const EdgeInsets.only(bottom: 35),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Flexible(
-                            flex: 2,
+                          Text(
+                            '20.02.2020',
+                            style: TextStyle(
+                              fontSize: 11.0.sp,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  "Магазин: ",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 11.0.sp,
+                                Flexible(
+                                  flex: 2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "Магазин: ",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 11.0.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 2,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Rosalie ",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12.0.sp,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Flexible(
-                            flex: 2,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Rosalie ",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12.0.sp,
-                                  ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Телефон продавца: ",
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 11.0.sp,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "+7 777 777 77 77",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 11.0.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Flexible(
-                          flex: 2,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "Способ получения: ",
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 11.0.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Доставка",
+                                    style: TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 11.0.sp,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                "Телефон продавца: ",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 11.0.sp,
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Адрес получателя: ",
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 11.0.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "ул. Достык, д.20, под. 2, кв. 12",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 11.0.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Flexible(
-                          flex: 2,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                "+7 777 777 77 77",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 12.0.sp,
-                                  fontWeight: FontWeight.w500,
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Время доставки: ",
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 11.0.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "10:00",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 12.0.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 7),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "Способ оплаты: ",
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 11.0.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "Наличными",
+                                        style: TextStyle(
+                                          color: Colors.black87,
+                                          fontSize: 12.0.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -128,167 +298,6 @@ class SingleOrderScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "Способ получения: ",
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 11.0.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        flex: 2,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Доставка",
-                              style: TextStyle(
-                                color: Colors.black87,
-                                fontSize: 12.0.sp,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Адрес получателя: ",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 11.0.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  "ул. Достык, д.20, под. 2, кв. 12",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Время доставки: ",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 11.0.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  "10:00",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 7),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Способ оплаты: ",
-                                style: TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 11.0.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 2,
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  "Наличными",
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 12.0.sp,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
               Padding(
                 padding:
@@ -313,12 +322,16 @@ class SingleOrderScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Монобукет\n',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0.sp,
-                                  fontWeight: FontWeight.bold,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: Text(
+                                  'Монобукет'.toUpperCase(),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15.0.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               Text('Пышные гортензии, королевские розы'),
@@ -329,7 +342,7 @@ class SingleOrderScreen extends StatelessWidget {
                                   text: TextSpan(
                                     text: "Количество: ",
                                     style: TextStyle(
-                                      fontSize: 10.0.sp,
+                                      fontSize: 9.0.sp,
                                       color: Colors.black,
                                     ),
                                     children: <TextSpan>[
@@ -352,7 +365,7 @@ class SingleOrderScreen extends StatelessWidget {
                                   text: TextSpan(
                                     text: "Сумма:\n",
                                     style: TextStyle(
-                                      fontSize: 10.0.sp,
+                                      fontSize: 9.0.sp,
                                       color: Colors.black,
                                     ),
                                     children: <TextSpan>[
@@ -372,7 +385,7 @@ class SingleOrderScreen extends StatelessWidget {
                           ),
                         ),
                         Flexible(
-                          flex: 2,
+                          flex: 3,
                           child: CachedNetworkImage(
                             placeholderFadeInDuration:
                                 Duration(milliseconds: 200),
@@ -380,10 +393,10 @@ class SingleOrderScreen extends StatelessWidget {
                                 'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
                             imageBuilder: (context, imageProvider) => Center(
                               child: Container(
-                                width: 100,
-                                height: 100,
+                                width: 110,
+                                height: 110,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
+                                  borderRadius: BorderRadius.circular(100),
                                   image: DecorationImage(
                                     image: imageProvider,
                                     fit: BoxFit.cover,
@@ -392,9 +405,7 @@ class SingleOrderScreen extends StatelessWidget {
                               ),
                             ),
                             placeholder: (context, string) => Center(
-                              child: CustomProgressWidget(
-                                color: Colors.grey,
-                              ),
+                              child: LoaderWidget(),
                             ),
                             errorWidget: (context, url, error) => Container(
                               child: const Center(
@@ -451,33 +462,37 @@ class SingleOrderScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey[300],
-                            blurRadius: 7,
-                            offset: Offset(0, 5),
-                          )
-                        ],
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            'Заказ получен',
-                            style: TextStyle(
-                              fontSize: 13.0.sp,
-                              color: AppStyle.colorGreen,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[300],
+                              blurRadius: 7,
+                              offset: Offset(0, 5),
+                            )
+                          ],
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Text(
+                              'Заказ получен'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 12.0.sp,
+                                color: AppStyle.colorGreen,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0.h),
+                      padding: EdgeInsets.only(bottom: 5.0.h, top: 15),
                       child: FlatButton(
                         color: AppStyle.colorPurple,
                         shape: RoundedRectangleBorder(
@@ -487,7 +502,7 @@ class SingleOrderScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateFeedbackScreen(),
+                              builder: (context) => CreateViewFeedbackScreen(),
                             ),
                           );
                         },
@@ -495,7 +510,7 @@ class SingleOrderScreen extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Text(
-                              'Оставить отзыв',
+                              'Оставить отзыв'.toUpperCase(),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,

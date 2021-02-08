@@ -21,7 +21,7 @@ class CardLongWidget extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey[300],
-              offset: Offset(0, 6),
+              offset: Offset(0, 5),
               blurRadius: 7,
             )
           ],

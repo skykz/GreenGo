@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/core/data/dialog_type.dart';
 import 'package:green_go/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -39,7 +39,7 @@ class _SingleOrderCreateScreenState extends State<SingleOrderCreateScreen> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios_rounded,
-            size: 25.0.sp,
+            size: 20.0.sp,
             color: Colors.purple[400],
           ),
           onPressed: () => Navigator.pop(context),
@@ -253,9 +253,7 @@ class _SingleOrderCreateScreenState extends State<SingleOrderCreateScreen> {
                               ),
                             ),
                             placeholder: (context, string) => Center(
-                              child: CustomProgressWidget(
-                                color: Colors.grey,
-                              ),
+                              child: LoaderWidget(),
                             ),
                             errorWidget: (context, url, error) => Container(
                               child: const Center(
@@ -375,9 +373,7 @@ class _SingleOrderCreateScreenState extends State<SingleOrderCreateScreen> {
                               ),
                             ),
                             placeholder: (context, string) => Center(
-                              child: CustomProgressWidget(
-                                color: Colors.grey,
-                              ),
+                              child: LoaderWidget(),
                             ),
                             errorWidget: (context, url, error) => Container(
                               child: const Center(

@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
-import 'package:green_go/screens/feedbacks/create_feedback.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
+import 'package:green_go/screens/feedbacks/create_view_feedback.dart';
 import 'package:green_go/screens/home/single_product.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,7 +20,7 @@ class FavoriteListScreen extends StatelessWidget {
             builder: (BuildContext context) {
               switch (settings.name) {
                 case '/viewFeedBacks':
-                  return CreateFeedbackScreen(
+                  return CreateViewFeedbackScreen(
                     isView: true,
                   );
                 case '/singleProduct':
@@ -43,7 +43,7 @@ class FavoriteListWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: 10,
       shrinkWrap: true,
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -97,9 +97,7 @@ class FavoriteListWidget extends StatelessWidget {
                             ),
                           ),
                           placeholder: (context, string) => Center(
-                            child: CustomProgressWidget(
-                              color: Colors.grey,
-                            ),
+                            child: LoaderWidget(),
                           ),
                           errorWidget: (context, url, error) => Container(
                             child: const Center(

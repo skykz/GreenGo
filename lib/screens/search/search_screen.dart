@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
-import 'package:green_go/screens/feedbacks/create_feedback.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
+import 'package:green_go/screens/feedbacks/create_view_feedback.dart';
 import 'package:green_go/screens/home/single_product.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
             builder: (BuildContext context) {
               switch (settings.name) {
                 case '/viewFeedBacks':
-                  return CreateFeedbackScreen(
+                  return CreateViewFeedbackScreen(
                     isView: true,
                   );
                 case '/singleProduct':
@@ -41,7 +41,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
 class SearchListItems extends StatelessWidget {
   SearchListItems({Key key}) : super(key: key);
-  final _textSearcTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,62 +48,6 @@ class SearchListItems extends StatelessWidget {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Column(
         children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 7,
-                      color: Colors.grey[200],
-                      spreadRadius: 0,
-                      offset: Offset(0, 5),
-                    )
-                  ]),
-              child: TextField(
-                cursorColor: Colors.purple,
-                cursorRadius: Radius.circular(10.0),
-                cursorWidth: 2,
-                controller: _textSearcTextController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  hintStyle: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[400],
-                  ),
-                  hintText: 'Попробуйте \'Розы\'',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    gapPadding: 4,
-                    borderSide: BorderSide(
-                      color: Colors.grey[200],
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.purple),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Colors.grey.withOpacity(0.2),
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                      icon: Icon(Icons.search, color: Colors.purple, size: 25),
-                      onPressed: () {}),
-                ),
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: 10,
@@ -163,9 +106,7 @@ class SearchListItems extends StatelessWidget {
                                     ),
                                   ),
                                   placeholder: (context, string) => Center(
-                                    child: CustomProgressWidget(
-                                      color: Colors.grey,
-                                    ),
+                                    child: LoaderWidget(),
                                   ),
                                   errorWidget: (context, url, error) =>
                                       Container(

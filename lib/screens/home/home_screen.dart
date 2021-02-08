@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/anim_slider.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/components/widgets/showcase_list_products.dart';
+import 'package:green_go/components/widgets/top_list_products.dart';
+import 'package:green_go/core/provider/home_provider.dart';
 import 'package:green_go/screens/home/single_home.dart';
-import 'package:green_go/screens/home/single_product.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
             builder: (BuildContext context) {
               switch (settings.name) {
                 case '/singleCatalogHome':
-                  return SingleHomeScreen();
+                  return SingleCategiryStoreHomeScreen();
                 default:
                   return HomeWidget();
                   break;
@@ -38,409 +39,229 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
-  ScrollController _scrollController;
+  Future getTopProducts;
+  Future getWindowProducts;
+  Future getCatalogProducts;
+
+  final items = [
+    CachedNetworkImage(
+      imageUrl: "http://via.placeholder.com/350x150",
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            )),
+      ),
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(
+        Icons.error_outline_rounded,
+        size: 50,
+      ),
+    ),
+    CachedNetworkImage(
+      imageUrl: "http://via.placeholder.com/350x150",
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            )),
+      ),
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(
+        Icons.error_outline_rounded,
+        size: 50,
+      ),
+    ),
+    CachedNetworkImage(
+      imageUrl: "http://via.placeholder.com/350x150",
+      imageBuilder: (context, imageProvider) => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(
+            image: imageProvider,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      placeholder: (context, url) => CircularProgressIndicator(),
+      errorWidget: (context, url, error) => Icon(
+        Icons.error_outline_rounded,
+        size: 50,
+      ),
+    ),
+  ];
 
   @override
   void initState() {
-    _scrollController = ScrollController();
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    getTopProducts = homeProvider.getTopProducts(context);
+    getWindowProducts = homeProvider.getWindowProducts(context);
+    getCatalogProducts = homeProvider.getCatalogsProducts(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    return Container(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            AnimSliderWidget(
-              h: h,
-              w: w,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30),
+            child: CarouselSlider(
+              items: items,
+              options: CarouselOptions(
+                height: h * 0.16,
+                viewportFraction: 0.7,
+                initialPage: 0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 5),
+                autoPlayAnimationDuration: Duration(milliseconds: 1000),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enlargeCenterPage: true,
+                scrollDirection: Axis.horizontal,
+              ),
             ),
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Text(
-                    'КАТАЛОГ ТОВАРОВ',
-                    style: TextStyle(
-                      fontSize: 13.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+          ),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Text(
+                  'КАТАЛОГ ТОВАРОВ',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
-                  height: 40.0.h,
-                  child: GridView.builder(
-                    itemCount: 12,
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: w / (h / 2.2),
-                    ),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SingleHomeScreen(),
-                              ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(8),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 8,
-                                    offset: Offset(0, 5),
-                                    spreadRadius: 1,
-                                    color: Colors.grey[300],
-                                  )
-                                ]),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl:
-                                      'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
-                                  imageBuilder: (context, imageProvider) =>
-                                      Center(
-                                    child: Container(
-                                      width: 65,
-                                      height: 65,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(50),
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  placeholder: (context, string) => Center(
-                                    child: CustomProgressWidget(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.error_outline_rounded,
-                                        color: Colors.red,
-                                        size: 25,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(child: Text("data[index]")),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+              ),
+              // SizedBox(
+              //   height: 40.0.h,
+              //   child: FutureBuilder(
+              //       future: getCatalogProducts,
+              //       builder: (BuildContext context, AsyncSnapshot snapshot) {
+              //         if (snapshot.data == null)
+              //           return Center(child: const LoaderWidget());
+              //         return GridView.builder(
+              //           itemCount: snapshot.data['data'].length,
+              //           scrollDirection: Axis.horizontal,
+              //           padding: const EdgeInsets.symmetric(horizontal: 10),
+              //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //             crossAxisCount: 2,
+              //             childAspectRatio: w / (h / 2.5),
+              //           ),
+              //           itemBuilder: (BuildContext context, int index) {
+              //             return Padding(
+              //               padding: const EdgeInsets.all(1),
+              //               child: InkWell(
+              //                 onTap: () {
+              //                   Navigator.push(
+              //                     context,
+              //                     MaterialPageRoute(
+              //                       builder: (context) =>
+              //                           SingleCategiryStoreHomeScreen(),
+              //                     ),
+              //                   );
+              //                 },
+              //                 borderRadius: BorderRadius.circular(8),
+              //                 child: Ink(
+              //                   decoration: BoxDecoration(
+              //                       color: Colors.white,
+              //                       borderRadius: BorderRadius.circular(8),
+              //                       boxShadow: [
+              //                         BoxShadow(
+              //                           blurRadius: 8,
+              //                           offset: Offset(0, 5),
+              //                           spreadRadius: 1,
+              //                           color: Colors.grey[300],
+              //                         )
+              //                       ]),
+              //                   child: Column(
+              //                     mainAxisAlignment:
+              //                         MainAxisAlignment.spaceEvenly,
+              //                     children: [
+              //                       CachedNetworkImage(
+              //                         imageUrl: snapshot.data['data'][index]
+              //                             [''],
+              //                         imageBuilder: (context, imageProvider) =>
+              //                             Center(
+              //                           child: Container(
+              //                             width: 65,
+              //                             height: 65,
+              //                             decoration: BoxDecoration(
+              //                               borderRadius:
+              //                                   BorderRadius.circular(50),
+              //                               image: DecorationImage(
+              //                                 image: imageProvider,
+              //                                 fit: BoxFit.cover,
+              //                               ),
+              //                             ),
+              //                           ),
+              //                         ),
+              //                         placeholder: (context, string) => Center(
+              //                           child: LoaderWidget(),
+              //                         ),
+              //                         errorWidget: (context, url, error) =>
+              //                             Container(
+              //                           child: const Center(
+              //                             child: Icon(
+              //                               Icons.error_outline_rounded,
+              //                               color: Colors.red,
+              //                               size: 25,
+              //                             ),
+              //                           ),
+              //                         ),
+              //                       ),
+              //                       Flexible(
+              //                           child: Text(
+              //                               "${snapshot.data['data'][index]['title']}")),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ),
+              //             );
+              //           },
+              //         );
+              //       }),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10, top: 15),
+                child: Text(
+                  'ТОП ТОВАРОВ',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15, top: 15),
-                  child: Text(
-                    'ТОП ТОВАРОВ',
-                    style: TextStyle(
-                      fontSize: 13.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+              ),
+              ListTopProducts(
+                future: getTopProducts,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10, top: 20),
+                child: Text(
+                  'ВИТРИНА ТОВАРОВ',
+                  style: TextStyle(
+                    fontSize: 13.0.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(
-                  height: 29.0.h,
-                  child: Stack(
-                    children: [
-                      ListView.builder(
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 15),
-                        itemBuilder: (BuildContext context, int index) {
-                          return Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(8),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            SingleProductScreen(),
-                                      ),
-                                    );
-                                  },
-                                  child: Ink(
-                                    width: 45.0.w,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 5,
-                                            offset: Offset(0, 5),
-                                            spreadRadius: 1,
-                                            color: Colors.grey[300],
-                                          )
-                                        ]),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl:
-                                              'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Center(
-                                            child: Container(
-                                              width: 85,
-                                              height: 85,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          placeholder: (context, string) =>
-                                              Center(
-                                            child: CustomProgressWidget(
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Container(
-                                            child: const Center(
-                                              child: Icon(
-                                                Icons.error_outline_rounded,
-                                                color: Colors.red,
-                                                size: 25,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: Center(
-                                            child: Text(
-                                              'Королевский свадебный',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12.5.sp,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          'Цена: 30 000',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 10.5.sp,
-                                          ),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      Icons.favorite_outline_rounded,
-                                      color: AppStyle.colorPurple,
-                                    ),
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_ios_rounded,
-                            color: AppStyle.colorGreen,
-                          ),
-                          onPressed: () {
-                            _scrollController.animateTo(
-                                _scrollController.offset - 200,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease);
-                          },
-                        ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            color: AppStyle.colorGreen,
-                          ),
-                          onPressed: () {
-                            _scrollController.animateTo(
-                                _scrollController.offset + 200,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.ease);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 15, top: 20),
-                  child: Text(
-                    'ВИТРИНА ТОВАРОВ',
-                    style: TextStyle(
-                      fontSize: 13.0.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                GridView.builder(
-                  itemCount: 12,
-                  shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                  physics: NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 2),
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(8),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SingleProductScreen(),
-                                ),
-                              );
-                            },
-                            child: Ink(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 8,
-                                      offset: Offset(0, 5),
-                                      spreadRadius: 1,
-                                      color: Colors.grey[300],
-                                    )
-                                  ]),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl:
-                                        'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
-                                    imageBuilder: (context, imageProvider) =>
-                                        Center(
-                                      child: Container(
-                                        width: 80,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, string) => Center(
-                                      child: CustomProgressWidget(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        Container(
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.error_outline_rounded,
-                                          color: Colors.red,
-                                          size: 25,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(child: Text("data[index]")),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          right: 3,
-                          top: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.favorite_outline_rounded,
-                                color: AppStyle.colorPurple,
-                              ),
-                              onPressed: () {},
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 5.0.h,
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+              ShowcaseListProducts(
+                future: getWindowProducts,
+              ),
+              SizedBox(
+                height: 5.0.h,
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

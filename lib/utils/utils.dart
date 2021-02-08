@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_go/components/widgets/custom_dialog.dart';
 import 'package:green_go/core/data/dialog_type.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<bool> displayCustomDialog(
   BuildContext context,
@@ -15,6 +16,7 @@ Future<bool> displayCustomDialog(
     context: context,
     barrierDismissible: barrierDismissible,
     builder: (context) => CustomActionDialog(
+      context: context,
       title: _title,
       dialogType: dialogType,
       onPressed: onPressed,
@@ -64,3 +66,11 @@ List<String> sortTypes = [
   'Популярность',
   'Новизна',
 ];
+
+launchURL(String _tel) async {
+  if (await canLaunch('$_tel')) {
+    await launch('$_tel');
+  } else {
+    throw 'Could not launch $_tel';
+  }
+}

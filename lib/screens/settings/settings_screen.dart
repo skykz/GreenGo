@@ -14,6 +14,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _isTrue = true;
+  int _radioValue1 = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -108,21 +109,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppStyle.colorGreen,
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
+                            Radio(
+                              activeColor: AppStyle.colorGreen,
+                              value: 0,
+                              groupValue: _radioValue1,
+                              onChanged: _handleRadioValueChange1,
                             ),
                             Flexible(
                               flex: 3,
@@ -145,21 +136,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: AppStyle.colorGreen,
-                                  border: Border.all(
-                                    color: Colors.grey,
-                                    width: 1,
-                                  ),
-                                ),
-                              ),
+                            Radio(
+                              activeColor: AppStyle.colorGreen,
+                              value: 1,
+                              groupValue: _radioValue1,
+                              onChanged: _handleRadioValueChange1,
                             ),
                             Text(
                               "Шагабутдинова, д. 105, под. 2, кв. 12  ",
@@ -215,5 +196,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
     );
+  }
+
+  _handleRadioValueChange1(Object _object) {
+    setState(() {
+      _radioValue1 = _object;
+    });
   }
 }

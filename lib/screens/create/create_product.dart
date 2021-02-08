@@ -265,7 +265,7 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                                   value: !isChecked,
                                   onChanged: (v) {
                                     setState(() {
-                                      isChecked = v;
+                                      isChecked = !v;
                                     });
                                   }),
                               Text("Возможна доставка"),

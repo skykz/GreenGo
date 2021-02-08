@@ -2,12 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
-import 'package:green_go/components/widgets/custom_loader.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:sizer/sizer.dart';
 
-class CreateFeedbackScreen extends StatelessWidget {
+class CreateViewFeedbackScreen extends StatelessWidget {
   final bool isView;
-  CreateFeedbackScreen({Key key, this.isView = false}) : super(key: key);
+  CreateViewFeedbackScreen({Key key, this.isView = false}) : super(key: key);
   final _textSearcTextController = TextEditingController();
 
   @override
@@ -21,7 +21,7 @@ class CreateFeedbackScreen extends StatelessWidget {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back_ios_rounded,
-              size: 25.0.sp,
+              size: 20.0.sp,
               color: Colors.purple[400],
             ),
             onPressed: () => Navigator.pop(context),
@@ -30,7 +30,7 @@ class CreateFeedbackScreen extends StatelessWidget {
         body: !this.isView
             ? SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -169,8 +169,8 @@ class CreateFeedbackScreen extends StatelessWidget {
                                   imageBuilder: (context, imageProvider) =>
                                       Center(
                                     child: Container(
-                                      width: 40,
-                                      height: 40,
+                                      width: 50,
+                                      height: 50,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(50),
                                         image: DecorationImage(
@@ -181,9 +181,7 @@ class CreateFeedbackScreen extends StatelessWidget {
                                     ),
                                   ),
                                   placeholder: (context, string) => Center(
-                                    child: CustomProgressWidget(
-                                      color: Colors.grey,
-                                    ),
+                                    child: LoaderWidget(),
                                   ),
                                   errorWidget: (context, url, error) =>
                                       Container(
@@ -201,7 +199,7 @@ class CreateFeedbackScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Имя пользователя',
+                                    'Имя пользователя'.toUpperCase(),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
@@ -223,11 +221,14 @@ class CreateFeedbackScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                          Text(
-                            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries',
-                            style: TextStyle(
-                              fontSize: 11.0.sp,
-                              fontWeight: FontWeight.w400,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Text(
+                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries',
+                              style: TextStyle(
+                                fontSize: 11.0.sp,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           )
                         ],

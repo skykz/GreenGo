@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/screens/products/products_list_screen.dart';
@@ -25,7 +23,6 @@ class _ProductsScreenState extends State<ProductsScreen>
 
   @override
   Widget build(BuildContext context) {
-    log("${_tabController.index}.");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
