@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -30,16 +32,9 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
   Future getShowcaseProducts;
 
   @override
-  void initState() {
-    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    getTopProducts = homeProvider.getTopProducts(context);
-    getShowcaseProducts = homeProvider.getWindowProducts(context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    var dataStore = ModalRoute.of(context).settings.arguments;
+    dynamic dataStore = ModalRoute.of(context).settings.arguments;
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -108,7 +103,7 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
                         ),
                       ),
                 ListTopProducts(
-                  future: getTopProducts,
+                  future: homeProvider.getTopProducts(context, dataStore['id']),
                 ),
               ],
             ),
@@ -140,16 +135,18 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
                         setState(() {
                           currentSelectedValue = newValue;
                         });
-                        print(currentSelectedValue);
+                        inspect(newValue);
                       },
-                      items: sortTypes.map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                          ),
-                        );
-                      }).toList(),
+                      items: sortTypes.entries
+                          .map(
+                            (e) => DropdownMenuItem<String>(
+                              value: e.value,
+                              child: Text(
+                                e.key,
+                              ),
+                            ),
+                          )
+                          .toList(),
                     ),
                   ),
                 );
@@ -246,10 +243,12 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
             ),
             this._isSquareType
                 ? ShowcaseListProducts(
-                    future: getShowcaseProducts,
+                    future: homeProvider.getWindowProducts(
+                        context, currentSelectedValue, dataStore['id']),
                   )
                 : FutureBuilder(
-                    future: getShowcaseProducts,
+                    future: homeProvider.getWindowProducts(
+                        context, currentSelectedValue, dataStore['id']),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.data == null)
                         return Center(child: const LoaderWidget());
@@ -360,12 +359,12 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
                                                     ),
                                                     children: <TextSpan>[
                                                       TextSpan(
-                                                        text:
-                                                            '${snapshot.data['data'][index]['title']}',
+                                                        text: dataStore['title']
+                                                            .toString(),
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w600,
-                                                            fontSize: 13.0.sp),
+                                                            fontSize: 12.0.sp),
                                                       ),
                                                     ],
                                                   ),
@@ -404,11 +403,14 @@ class _SingleHomeScreenState extends State<SingleCategiryStoreHomeScreen> {
                                                     ],
                                                   ),
                                                 ),
-                                                Text(
-                                                  'Цена ${snapshot.data['data'][index]['cost']}',
-                                                  style: TextStyle(
-                                                    fontSize: 11.0.sp,
-                                                    fontWeight: FontWeight.bold,
+                                                Flexible(
+                                                  child: Text(
+                                                    'Цена ${snapshot.data['data'][index]['cost']}',
+                                                    style: TextStyle(
+                                                      fontSize: 11.0.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ],

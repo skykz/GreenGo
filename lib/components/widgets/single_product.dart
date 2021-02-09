@@ -4,7 +4,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/screens/feedbacks/create_view_feedback.dart';
 import 'package:green_go/utils/utils.dart';
-import 'package:intl/intl.dart';
 
 import 'package:sizer/sizer.dart';
 

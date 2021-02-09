@@ -23,7 +23,7 @@ import 'category/store_category_screen.dart';
 import 'create/create_product.dart';
 import 'favorite/favorite_lists_screen.dart';
 import 'home/home_screen.dart';
-import 'home/single_home.dart';
+import 'home/single_store_home.dart';
 import 'home/single_product.dart';
 
 class IndexScreen extends StatefulWidget {

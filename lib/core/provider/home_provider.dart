@@ -75,7 +75,7 @@ class HomeProvider extends BaseProvider {
       inspect(_smsCode);
       inspect(_phone);
       setLoadingState(true);
-      _greenGoApi.finishRegisterByCode(_smsCode, _phone).then((value) {
+      _greenGoApi.finishRegisterByCode(_smsCode, _phone, context).then((value) {
         if (value != null) {
           if (value['data']['token'] != null) {
             _pageController.animateToPage(3,
@@ -96,8 +96,14 @@ class HomeProvider extends BaseProvider {
       setLoadingState(true);
       _greenGoApi.changePinCode(_pinCode).then((value) {
         if (value != null) {
+          _pageController.animateToPage(3,
+              duration: Duration(milliseconds: 300), curve: Curves.easeIn);
           showCustomSnackBar(context, 'Пин код успешно изменился!',
               Colors.green, Icons.check_rounded);
+          Future.delayed(
+            const Duration(milliseconds: 1300),
+            () => Navigator.pop(context),
+          );
         }
       }).whenComplete(() => setLoadingState(false));
     } else {
@@ -106,13 +112,15 @@ class HomeProvider extends BaseProvider {
     }
   }
 
-  recoverPassword(BuildContext context, String _pinCode) async {
-    inspect(_pinCode);
-    if (_pinCode.length >= 5) {
+  recoverPassword(BuildContext context, String _phone) async {
+    inspect(_phone);
+    if (_phone.length >= 11) {
       setLoadingState(true);
-      _greenGoApi.changePinCode(_pinCode).then((value) {
+      _greenGoApi.recoverPinCode(_phone, context).then((value) {
         if (value != null) {
-          showCustomSnackBar(context, 'Пин код успешно изменился!',
+          _pageController.animateToPage(2,
+              duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+          showCustomSnackBar(context, 'SMS код отправлен на Ваш номер.',
               Colors.green, Icons.check_rounded);
         }
       }).whenComplete(() => setLoadingState(false));
@@ -133,20 +141,26 @@ class HomeProvider extends BaseProvider {
     await _prefs.setString('accessToken', _token);
   }
 
-  Future getTopProducts(BuildContext context) async {
-    return await _greenGoApi.getTopProducts(context);
+  Future getTopProducts(BuildContext context, [int storeId]) async {
+    return await _greenGoApi.getTopProducts(
+      storeId,
+      context,
+    );
   }
 
-  Future getWindowProducts(BuildContext context) async {
-    return await _greenGoApi.getWindowProducts(context);
+  Future getWindowProducts(BuildContext context,
+      [String sort, int storeId]) async {
+    inspect(sort);
+    inspect(storeId);
+
+    return await _greenGoApi.getWindowProducts(sort, storeId, context);
   }
 
-  Future getCatalogsProducts(BuildContext context) async {
-    return await _greenGoApi.getCatologList(context);
+  Future getCatalogsProducts(BuildContext context, [bool isRoot]) async {
+    return await _greenGoApi.getCatologList(isRoot, context);
   }
 
   /// get stores list
-  ///
   Future getStoresList(BuildContext context) async {
     return await _greenGoApi.getStoresList(context);
   }
@@ -157,5 +171,13 @@ class HomeProvider extends BaseProvider {
 
   Future getSingleProduct(int id, BuildContext context) async {
     return await _greenGoApi.getSingleProduct(id, context);
+  }
+
+  Future getBannerList(BuildContext context) async {
+    return await _greenGoApi.getMainBanners(context);
+  }
+
+  Future getSameProduct(BuildContext context, int _categoryId) async {
+    return await _greenGoApi.getSameProduct(_categoryId, context);
   }
 }

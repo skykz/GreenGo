@@ -818,13 +818,21 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                     fontSize: 13.0.sp,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Text(
-                    'Забыли пароль?',
-                    style: TextStyle(
-                      fontSize: 10.0.sp,
-                      color: Color.fromRGBO(158, 26, 239, 0.5),
+                Builder(
+                  builder: (ctx) => InkWell(
+                    onTap: () {
+                      _value.recoverPassword(
+                          ctx, _phoneValueController.getUnmaskedText());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        'Забыли пароль?',
+                        style: TextStyle(
+                          fontSize: 10.0.sp,
+                          color: Color.fromRGBO(158, 26, 239, 0.5),
+                        ),
+                      ),
                     ),
                   ),
                 )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:green_go/components/widgets/long_card_widget.dart';
-import 'package:green_go/screens/home/single_home.dart';
+import 'package:green_go/screens/home/single_store_home.dart';
 import 'package:sizer/sizer.dart';
 
 class CategoryScreen extends StatelessWidget {

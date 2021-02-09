@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -22,11 +21,7 @@ class SingleProductScreen extends StatefulWidget {
 }
 
 class _SingleProductScreenState extends State<SingleProductScreen> {
-  int _current = 0;
-
   Future getSingleProduct;
-  Future getProductsStore;
-  Future getSameCategory;
   StreamController _streamController;
 
   @override
@@ -34,7 +29,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
     _streamController = StreamController.broadcast();
 
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    inspect(this.widget.singleProductData['id']);
     getSingleProduct = homeProvider.getSingleProduct(
         this.widget.singleProductData['id'], context);
 
@@ -507,7 +501,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                 ),
                                               ),
                                               placeholder: (context, string) =>
-                                                  Center(
+                                                  const Center(
                                                 child: LoaderWidget(),
                                               ),
                                               errorWidget:
@@ -584,113 +578,123 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                   ),
                   SizedBox(
                     height: 30.0.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 12),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(8),
-                                onTap: () {},
-                                child: Ink(
-                                  width: 43.0.w,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
+                    child: FutureBuilder(
+                        future: homeProvider.getProductsStore(
+                            context, snapshot.data['data']['categoryId']),
+                        builder: (BuildContext context, AsyncSnapshot snaps) {
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snaps.data['data'].length,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 12),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: InkWell(
                                       borderRadius: BorderRadius.circular(8),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 5,
-                                          offset: Offset(0, 5),
-                                          spreadRadius: 1,
-                                          color: Colors.grey[300],
-                                        )
-                                      ]),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                            'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
-                                        imageBuilder:
-                                            (context, imageProvider) => Center(
-                                          child: Container(
-                                            width: 80,
-                                            height: 80,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
-                                              image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover,
+                                      onTap: () {},
+                                      child: Ink(
+                                        width: 43.0.w,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 5,
+                                                offset: Offset(0, 5),
+                                                spreadRadius: 1,
+                                                color: Colors.grey[300],
+                                              )
+                                            ]),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            CachedNetworkImage(
+                                              imageUrl: snaps.data['data']
+                                                  [index]['avatar'],
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Center(
+                                                child: Container(
+                                                  width: 80,
+                                                  height: 80,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            50),
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              placeholder: (context, string) =>
+                                                  Center(
+                                                child: LoaderWidget(),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Container(
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.error_outline_rounded,
+                                                    color: Colors.red,
+                                                    size: 25,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        placeholder: (context, string) =>
-                                            Center(
-                                          child: LoaderWidget(),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          child: const Center(
-                                            child: Icon(
-                                              Icons.error_outline_rounded,
-                                              color: Colors.red,
-                                              size: 25,
+                                            Flexible(
+                                              child: Center(
+                                                child: Text(
+                                                  snaps.data['data'][index]
+                                                      ['title'],
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12.5.sp,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        child: Center(
-                                          child: Text(
-                                            'Королевский свадебный',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12.5.sp,
+                                            Text(
+                                              'Цена: ${snaps.data['data'][index]['cost']}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 10.5.sp,
+                                              ),
+                                              textAlign: TextAlign.center,
                                             ),
-                                            textAlign: TextAlign.center,
-                                          ),
+                                          ],
                                         ),
                                       ),
-                                      Text(
-                                        'Цена: 30 000',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 10.5.sp,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: IconButton(
-                                icon: Icon(
-                                  Icons.favorite_outline_rounded,
-                                  color: AppStyle.colorPurple,
-                                ),
-                                onPressed: () {},
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    ),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.favorite_outline_rounded,
+                                        color: AppStyle.colorPurple,
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          );
+                        }),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(

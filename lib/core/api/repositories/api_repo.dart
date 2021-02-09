@@ -13,8 +13,10 @@ class GreenGoApi {
   // auth API
   static const AUTH_LOGIN = 'auth/login';
   static const AUTH_REGISTER = 'auth/register';
-  static const AUTH_REGISTER_CONFIRM = 'auth/register/confirm';
+  static const AUTH_REGISTER_CONFIRM = 'auth/login/by-code';
   static const AUTH_CHANGE_PASSWORD = 'auth/password';
+  static const AUTH_FORGET_PASSWORD = 'auth/send/code';
+
   static const INFO = 'auth/info';
 
   //Banners
@@ -73,14 +75,13 @@ class GreenGoApi {
     return response;
   }
 
-  Future<dynamic> recoverPinCode(String password,
-      [BuildContext context]) async {
-    dynamic response = await _networkCall.doRequestMain(
-      path: AUTH_CHANGE_PASSWORD,
-      method: 'PATCH',
+  Future<dynamic> recoverPinCode(String _phone, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestAuth(
+      path: AUTH_FORGET_PASSWORD,
+      method: 'POST',
       context: context,
       body: {
-        'password': password,
+        'login': _phone,
       },
     );
     return response;
@@ -106,33 +107,35 @@ class GreenGoApi {
       method: 'POST',
       context: context,
       body: {
-        'phone': _phone,
+        'login': _phone,
         'code': _smsCode,
       },
     );
     return response;
   }
 
-  Future<dynamic> getWindowProducts([BuildContext context]) async {
+  Future<dynamic> getWindowProducts(String sort, int storeId,
+      [BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
       path: GET_PRODUCT,
       method: 'GET',
       context: context,
       requestParams: {
-        'filter[categoryId]': 1,
+        if (storeId != null) 'filter[storeId]': storeId,
+        if (sort != null) 'sort[]': sort,
       },
     );
     return response;
   }
 
-  Future<dynamic> getTopProducts([BuildContext context]) async {
+  Future<dynamic> getTopProducts([int storeId, BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
         path: GET_PRODUCT,
         method: 'GET',
         context: context,
         requestParams: {
           'sort[]': 'salesCount,desc',
-          'filter[categoryId]': 1,
+          if (storeId != null) 'filter[storeId]': storeId,
         });
     return response;
   }
@@ -146,11 +149,14 @@ class GreenGoApi {
     return response;
   }
 
-  Future<dynamic> getCatologList([BuildContext context]) async {
+  Future<dynamic> getCatologList([bool isRoot, BuildContext context]) async {
+    String path;
+    if (isRoot) path = '?filter[parentId]=null';
     dynamic response = await _networkCall.doRequestAuth(
-      path: GET_CATEGORIES_CATALOG,
+      path: GET_CATEGORIES_CATALOG + path,
       method: 'GET',
       context: context,
+      requestParams: {},
     );
     return response;
   }
@@ -168,6 +174,24 @@ class GreenGoApi {
   Future<dynamic> getProductsStore(int _id, [BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
       path: GET_PRODUCT + '?filter[storeId]=$_id',
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> getSameProduct(int _id, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestAuth(
+      path: GET_PRODUCT + '?filter[categoryId]=$_id',
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> getMainBanners([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestAuth(
+      path: GET_BANNERS,
       method: 'GET',
       context: context,
     );

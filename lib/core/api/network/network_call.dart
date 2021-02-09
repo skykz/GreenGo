@@ -121,9 +121,9 @@ Future<void> handleError(DioError error, BuildContext context) async {
 
         break;
       case DioErrorType.RESPONSE:
-        errorDescription =
-            "Ошибка: " + error.response.data['data'].toString() ??
-                error.response.data['message'];
+        errorDescription = error.response.data['data'].toString().isEmpty
+            ? "Ошибка: " + error.response.data['message']
+            : "Ошибка: " + error.response.data['data'].toString();
         print(errorDescription);
 
         break;

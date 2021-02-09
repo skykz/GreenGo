@@ -59,13 +59,13 @@ void showCustomSnackBar(
     );
 }
 
-List<String> sortTypes = [
-  'Цена по убыванию',
-  'Цена по возрастанию',
-  'Рейтинг',
-  'Популярность',
-  'Новизна',
-];
+Map<String, String> sortTypes = {
+  'Цена по убыванию': 'cost,asc',
+  'Цена по возрастанию': 'cost,desc',
+  'Рейтинг': 'rating,desc',
+  'Популярность': 'salesCount,desc',
+  'Новизна': 'createdAt,desc',
+};
 
 launchURL(String _tel) async {
   if (await canLaunch('$_tel')) {
