@@ -22,10 +22,13 @@ class GreenGoApi {
   //Banners
   static const GET_BANNERS = 'banners';
 
+  //search by query
+  static const DO_SEARCH = 'search';
+
   //Cart
   static const GET_CART = 'cart/items?filter[sellerId]=1';
-  static const TO_CART = 'cart/products/1';
-  static const ORDER = 'cart/order';
+  static const MY_CART = 'my/cart';
+  static const CART = 'cart';
   static const DELETE_FROM_CART = 'cart/products/1';
 
   //Categories
@@ -114,7 +117,7 @@ class GreenGoApi {
     return response;
   }
 
-  Future<dynamic> getWindowProducts(String sort, int storeId,
+  Future<dynamic> getWindowProducts(String sort, int storeId, int categoryId,
       [BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
       path: GET_PRODUCT,
@@ -122,13 +125,15 @@ class GreenGoApi {
       context: context,
       requestParams: {
         if (storeId != null) 'filter[storeId]': storeId,
+        if (categoryId != null) 'filter[categoryId]': categoryId,
         if (sort != null) 'sort[]': sort,
       },
     );
     return response;
   }
 
-  Future<dynamic> getTopProducts([int storeId, BuildContext context]) async {
+  Future<dynamic> getTopProducts(
+      [int storeId, int categoryId, BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
         path: GET_PRODUCT,
         method: 'GET',
@@ -136,6 +141,7 @@ class GreenGoApi {
         requestParams: {
           'sort[]': 'salesCount,desc',
           if (storeId != null) 'filter[storeId]': storeId,
+          if (categoryId != null) 'filter[categoryId]': categoryId,
         });
     return response;
   }
@@ -149,9 +155,14 @@ class GreenGoApi {
     return response;
   }
 
-  Future<dynamic> getCatologList([bool isRoot, BuildContext context]) async {
+  Future<dynamic> getCatologList(
+      [bool isRoot, int parentId, BuildContext context]) async {
     String path;
-    if (isRoot) path = '?filter[parentId]=null';
+    if (isRoot)
+      path = '?filter[parentId]=null';
+    else
+      path = '?filter[parentId]=$parentId';
+
     dynamic response = await _networkCall.doRequestAuth(
       path: GET_CATEGORIES_CATALOG + path,
       method: 'GET',
@@ -195,6 +206,47 @@ class GreenGoApi {
       method: 'GET',
       context: context,
     );
+    return response;
+  }
+
+  Future<dynamic> getMyCart([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: MY_CART,
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> search(String _query, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestAuth(
+        path: DO_SEARCH,
+        method: 'GET',
+        context: context,
+        requestParams: {
+          'query': _query,
+        });
+    return response;
+  }
+
+  Future<dynamic> deleteCartItem(int _itemId, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: CART + "/$_itemId",
+      method: 'DELETE',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> changeCartItemCount(int _itemId, int count,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: CART + "/$_itemId",
+        method: 'PATCH',
+        context: context,
+        body: {
+          'count': count,
+        });
     return response;
   }
 }

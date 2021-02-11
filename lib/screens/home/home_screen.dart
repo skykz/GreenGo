@@ -5,7 +5,7 @@ import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/components/widgets/showcase_list_products.dart';
 import 'package:green_go/components/widgets/top_list_products.dart';
 import 'package:green_go/core/provider/home_provider.dart';
-import 'package:green_go/screens/home/single_store_home.dart';
+import 'package:green_go/screens/home/single_store_category.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
             builder: (BuildContext context) {
               switch (settings.name) {
                 case '/singleCatalogHome':
-                  return SingleCategiryStoreHomeScreen();
+                  return SingleCategoryStoreHomeScreen();
                 default:
                   return HomeWidget();
                   break;
@@ -150,9 +150,13 @@ class _HomeWidgetState extends State<HomeWidget> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        SingleCategiryStoreHomeScreen(),
-                                  ),
+                                      builder: (context) =>
+                                          SingleCategoryStoreHomeScreen(
+                                            isStore: false,
+                                          ),
+                                      settings: RouteSettings(
+                                          arguments: snapshot.data['data']
+                                              [index])),
                                 );
                               },
                               borderRadius: BorderRadius.circular(8),

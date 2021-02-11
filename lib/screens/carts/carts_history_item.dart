@@ -3,7 +3,8 @@ import 'package:green_go/screens/products/products_list_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class CartsHistoryItemScreen extends StatelessWidget {
-  const CartsHistoryItemScreen({Key key}) : super(key: key);
+  final dynamic snapshot;
+  const CartsHistoryItemScreen({Key key, this.snapshot}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

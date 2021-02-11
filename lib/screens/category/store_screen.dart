@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/core/provider/home_provider.dart';
-import 'package:green_go/screens/home/single_store_home.dart';
+import 'package:green_go/screens/home/single_store_category.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,7 +21,7 @@ class StoreCategory extends StatelessWidget {
                     isStore: false,
                   );
                 case '/singleStore':
-                  return SingleCategiryStoreHomeScreen(
+                  return SingleCategoryStoreHomeScreen(
                     isStore: true,
                   );
                 default:

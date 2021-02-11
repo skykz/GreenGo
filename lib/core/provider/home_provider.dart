@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,24 @@ class HomeProvider extends BaseProvider {
   PageController _pageController = PageController();
 
   PageController get getPageController => _pageController;
+
+  dynamic foundedList;
+  Timer _timer;
+  int _selectedCategoryIndex = 0;
+  int get getSelectedCategoryIndex => this._selectedCategoryIndex;
+
+  int _selectedCategoryId;
+  int get getSelectedCategoryId => this._selectedCategoryId;
+
+  void setSelectedCategoryIndex(int val) {
+    this._selectedCategoryIndex = val;
+    notifyListeners();
+  }
+
+  void setSelectedCategoryId(int val) {
+    this._selectedCategoryId = val;
+    notifyListeners();
+  }
 
   void setSelectedIndex(int val) {
     this._selectedIndex = val;
@@ -35,6 +54,7 @@ class HomeProvider extends BaseProvider {
     if (_phone.length >= 11 && _pinCode.length >= 5) {
       setLoadingState(true);
       _greenGoApi.authLogin(_phone, _pinCode, context).then((value) {
+        setAccessToken(value['data']['token']);
         showCustomSnackBar(context, 'Вы успешно авторизовались!', Colors.green,
             Icons.check_rounded);
         Future.delayed(
@@ -141,23 +161,28 @@ class HomeProvider extends BaseProvider {
     await _prefs.setString('accessToken', _token);
   }
 
-  Future getTopProducts(BuildContext context, [int storeId]) async {
+  Future getTopProducts(BuildContext context,
+      [int storeId, int categoryId]) async {
     return await _greenGoApi.getTopProducts(
       storeId,
+      categoryId,
       context,
     );
   }
 
   Future getWindowProducts(BuildContext context,
-      [String sort, int storeId]) async {
+      [String sort, int storeId, int categoryId]) async {
     inspect(sort);
     inspect(storeId);
+    inspect(categoryId);
 
-    return await _greenGoApi.getWindowProducts(sort, storeId, context);
+    return await _greenGoApi.getWindowProducts(
+        sort, storeId, categoryId, context);
   }
 
-  Future getCatalogsProducts(BuildContext context, [bool isRoot]) async {
-    return await _greenGoApi.getCatologList(isRoot, context);
+  Future getCatalogsProducts(BuildContext context,
+      [bool isRoot, int parentId]) async {
+    return await _greenGoApi.getCatologList(isRoot, parentId, context);
   }
 
   /// get stores list
@@ -179,5 +204,55 @@ class HomeProvider extends BaseProvider {
 
   Future getSameProduct(BuildContext context, int _categoryId) async {
     return await _greenGoApi.getSameProduct(_categoryId, context);
+  }
+
+  Future getMyCart(BuildContext context) async {
+    return await _greenGoApi.getMyCart(context);
+  }
+
+  void doSearch(String _query, BuildContext context) async {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    log('$_query');
+    _timer = Timer(Duration(milliseconds: 300), () {
+      if (_query.isNotEmpty) {
+        setLoadingState(true);
+        _greenGoApi.search(_query, context).then((value) {
+          if (value != null) foundedList = value;
+          notifyListeners();
+        }).whenComplete(() => setLoadingState(false));
+      } else {
+        foundedList = null;
+        notifyListeners();
+      }
+    });
+  }
+
+  Future deleteCartItem(int itemId, BuildContext context) async {
+    setLoadingState(true);
+    _greenGoApi.deleteCartItem(itemId, context).then((value) {
+      if (value['message'] != null)
+        showCustomSnackBar(context, value['message'].toString(), Colors.green,
+            Icons.check_rounded);
+    }).whenComplete(() => setLoadingState(false));
+  }
+
+  Future changeCartItemCount(
+      int itemId, int count, BuildContext context) async {
+    if (itemId != null && count != null) {
+      if (_timer != null) {
+        _timer.cancel();
+      }
+      _timer = Timer(Duration(milliseconds: 1000), () async {
+        setLoadingState(true);
+        _greenGoApi.changeCartItemCount(itemId, count, context).then((value) {
+          inspect(value);
+          if (value['message'] != null)
+            showCustomSnackBar(context, value['message'].toString(),
+                Colors.green, Icons.check_rounded);
+        }).whenComplete(() => setLoadingState(false));
+      });
+    }
   }
 }

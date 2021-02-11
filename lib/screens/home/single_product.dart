@@ -243,7 +243,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 5),
                                     child: Text(
-                                      'Ариткул: ${snapshot.data['data']['code']}',
+                                      'Ариткул: ${snapshot.data['data']['code'] ?? ''}',
                                       style: TextStyle(
                                         fontSize: 11.0.sp,
                                       ),
@@ -456,7 +456,18 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                     padding: const EdgeInsets.all(5),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(8),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SingleProductScreen(
+                                              singleProductData:
+                                                  snap.data['data'][index],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       child: Ink(
                                         width: 43.0.w,
                                         padding: const EdgeInsets.symmetric(
@@ -582,19 +593,37 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                         future: homeProvider.getProductsStore(
                             context, snapshot.data['data']['categoryId']),
                         builder: (BuildContext context, AsyncSnapshot snaps) {
+                          if (snaps.data == null)
+                            return Center(child: const LoaderWidget());
+
+                          if (snaps.data['data'].length == 0)
+                            return Center(
+                              child: const Text('Нету похожих товаров'),
+                            );
                           return ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: snaps.data['data'].length,
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 12),
-                            itemBuilder: (BuildContext context, int index) {
+                            itemBuilder: (BuildContext context, int i) {
                               return Stack(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(5),
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(8),
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                SingleProductScreen(
+                                              singleProductData:
+                                                  snaps.data['data'][i],
+                                            ),
+                                          ),
+                                        );
+                                      },
                                       child: Ink(
                                         width: 43.0.w,
                                         padding: const EdgeInsets.symmetric(
@@ -618,8 +647,8 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             CachedNetworkImage(
-                                              imageUrl: snaps.data['data']
-                                                  [index]['avatar'],
+                                              imageUrl: snaps.data['data'][i]
+                                                  ['avatar'],
                                               imageBuilder:
                                                   (context, imageProvider) =>
                                                       Center(
@@ -656,7 +685,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                             Flexible(
                                               child: Center(
                                                 child: Text(
-                                                  snaps.data['data'][index]
+                                                  snaps.data['data'][i]
                                                       ['title'],
                                                   style: TextStyle(
                                                     color: Colors.black,
@@ -667,7 +696,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                               ),
                                             ),
                                             Text(
-                                              'Цена: ${snaps.data['data'][index]['cost']}',
+                                              'Цена: ${snaps.data['data'][i]['cost']}',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 10.5.sp,

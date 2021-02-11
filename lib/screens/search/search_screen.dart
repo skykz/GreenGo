@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/components/widgets/loader_widget.dart';
+import 'package:green_go/core/provider/home_provider.dart';
 import 'package:green_go/screens/feedbacks/create_view_feedback.dart';
 import 'package:green_go/screens/home/single_product.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -44,17 +48,45 @@ class SearchListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context);
+
+    if (homeProvider.getIsLoading)
+      return const Center(
+        child: LoaderWidget(),
+      );
+    if (homeProvider.foundedList == null)
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 100),
+          child: const Text(
+            'Нету данных!',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+      );
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 10,
+              itemCount: homeProvider.foundedList != null
+                  ? homeProvider.foundedList['data'].length
+                  : 0,
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (BuildContext context, int index) {
+                if (homeProvider.foundedList['data'].length == 0)
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50),
+                      child: const Text('Нету данных!'),
+                    ),
+                  );
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Stack(
                     children: [
                       InkWell(
@@ -89,8 +121,8 @@ class SearchListItems extends StatelessWidget {
                               Flexible(
                                 flex: 1,
                                 child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://www.thoughtco.com/thmb/19F0cna2JSUcDnkuv7oUiSYALBQ=/768x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/lotus-flower-828457262-5c6334b646e0fb0001dcd75a.jpg',
+                                  imageUrl: homeProvider.foundedList['data']
+                                      [index]['avatar'],
                                   imageBuilder: (context, imageProvider) =>
                                       Center(
                                     child: Container(
@@ -105,7 +137,8 @@ class SearchListItems extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  placeholder: (context, string) => Center(
+                                  placeholder: (context, string) =>
+                                      const Center(
                                     child: LoaderWidget(),
                                   ),
                                   errorWidget: (context, url, error) =>
@@ -132,7 +165,9 @@ class SearchListItems extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Букет с гортензией',
+                                        homeProvider.foundedList['data'][index]
+                                                ['title']
+                                            .toString(),
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 13.0.sp,
@@ -143,14 +178,23 @@ class SearchListItems extends StatelessWidget {
                                           text: 'Магазин:\n',
                                           style: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: 10.0.sp,
+                                            fontSize: 9.5.sp,
                                           ),
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: 'Rosalie',
+                                              text: homeProvider.foundedList[
+                                                              'data'][index]
+                                                          ['store'] ==
+                                                      null
+                                                  ? homeProvider.foundedList[
+                                                          'data'][index]
+                                                      ['author']['fullName']
+                                                  : homeProvider
+                                                          .foundedList['data']
+                                                      [index]['store']['title'],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
-                                                  fontSize: 13.0.sp),
+                                                  fontSize: 12.0.sp),
                                             ),
                                           ],
                                         ),
@@ -166,11 +210,14 @@ class SearchListItems extends StatelessWidget {
                                               'Рейтинг:',
                                               style: TextStyle(
                                                 color: Colors.black54,
-                                                fontSize: 10.0.sp,
+                                                fontSize: 9.5.sp,
                                               ),
                                             ),
                                             RatingBarIndicator(
-                                              rating: 3.5,
+                                              rating: homeProvider
+                                                          .foundedList['data']
+                                                      [index]['rating'] ??
+                                                  3.5,
                                               itemBuilder: (context, index) =>
                                                   Icon(
                                                 Icons.star_rounded,
@@ -185,7 +232,7 @@ class SearchListItems extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        'Цена 13 000',
+                                        'Цена ${homeProvider.foundedList['data'][index]['cost']}',
                                         style: TextStyle(
                                           fontSize: 11.0.sp,
                                           fontWeight: FontWeight.bold,

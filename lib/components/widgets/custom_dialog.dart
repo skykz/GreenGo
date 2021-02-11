@@ -58,7 +58,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
               child: Scaffold(
                 body: PageView(
                   controller: value.getPageController,
-                  // physics: NeverScrollableScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   children: [
                     //login
                     _setAuthView(value),

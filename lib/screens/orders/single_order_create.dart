@@ -422,14 +422,16 @@ class _SingleOrderCreateScreenState extends State<SingleOrderCreateScreen> {
                                 });
                                 print(currentSelectedValue);
                               },
-                              // items: sortTypes.map((String value) {
-                              //   return DropdownMenuItem<String>(
-                              //     value: value,
-                              //     child: Text(
-                              //       value,
-                              //     ),
-                              //   );
-                              // }).toList(),
+                              items: sortTypes.entries
+                                  .map(
+                                    (e) => DropdownMenuItem<String>(
+                                      value: e.value,
+                                      child: Text(
+                                        e.key,
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ),
                         );
