@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/core/api/repositories/api_repo.dart';
+import 'package:green_go/core/data/dialog_type.dart';
 import 'package:green_go/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -244,7 +246,7 @@ class HomeProvider extends BaseProvider {
       if (_timer != null) {
         _timer.cancel();
       }
-      _timer = Timer(Duration(milliseconds: 1000), () async {
+      _timer = Timer(Duration(milliseconds: 1500), () async {
         setLoadingState(true);
         _greenGoApi.changeCartItemCount(itemId, count, context).then((value) {
           inspect(value);
@@ -254,5 +256,127 @@ class HomeProvider extends BaseProvider {
         }).whenComplete(() => setLoadingState(false));
       });
     }
+  }
+
+  createOrderFromCart(
+      String _phone,
+      String _time,
+      int _sellerId,
+      String _sellerType,
+      String _address,
+      String _deliveryMethod,
+      String _paymentMethod,
+      BuildContext context) async {
+    if (_phone.isNotEmpty &&
+        _paymentMethod.isNotEmpty &&
+        _sellerId != null &&
+        _sellerType.isNotEmpty) {
+      setLoadingState(true);
+      Map<String, dynamic> _bodyFormat = {
+        "sellerId": _sellerId,
+        "sellerType": _sellerType,
+        "deliveryMethod": _deliveryMethod,
+        "address": _address,
+        "time": _time,
+        "paymentMethod": _paymentMethod,
+        "phone": _phone,
+      };
+      inspect(_bodyFormat);
+      _greenGoApi.createOrderFromCart(_bodyFormat, context).then((value) {
+        if (value != null) {
+          showCustomSnackBar(
+              context, value['message'], Colors.green, Icons.check_rounded);
+          displayCustomDialog(
+            context,
+            '',
+            DialogType.OrderType,
+            false,
+            () {},
+          );
+        }
+      }).whenComplete(
+        () => setLoadingState(false),
+      );
+    }
+  }
+
+  addProductToCart(int _productId, BuildContext context) {
+    if (_productId != null) {
+      setLoadingState(true);
+      _greenGoApi.addItemToCart(_productId, context).then((value) {
+        if (value['message'] != null)
+          showCustomSnackBar(
+              context, value['message'], Colors.green, Icons.check_rounded);
+      }).whenComplete(() => setLoadingState(false));
+    }
+  }
+
+  Future getAddressList(BuildContext context) async {
+    return await _greenGoApi.getAddressUser(context);
+  }
+
+  Future getOrderHistory(bool _isArchive, BuildContext context) async {
+    return await _greenGoApi.getOrderHistory(_isArchive, context);
+  }
+
+  setNewAddress(
+      int _addId, String _value, bool _isMain, BuildContext context) async {
+    setLoadingState(true);
+
+    _greenGoApi
+        .setNewAddressStatus(_addId, _value, _isMain, context)
+        .whenComplete(() => setLoadingState(false));
+  }
+
+  Future uploadImageItem(File _file, BuildContext context) async {
+    setLoadingState(true);
+    return await _greenGoApi
+        .uploadImage(_file, context)
+        .whenComplete(() => setLoadingState(false));
+  }
+
+  Future getMyProductsUserActive(BuildContext context) async {
+    return await _greenGoApi.getMyProductsActive(context);
+  }
+
+  Future getMyProductsUserNotActive(BuildContext context) async {
+    return await _greenGoApi.getMyProductsNotActive(context);
+  }
+
+  createProduct(int cost, String _title, String _desc, bool canPickup,
+      bool canDeliver, List<int> _imageId, context) {
+    setLoadingState(true);
+    _greenGoApi
+        .createProducts(
+            cost, _title, _desc, canPickup, canDeliver, _imageId, context)
+        .then((value) {
+      if (value != null) {
+        showCustomSnackBar(
+            context, value['message'], Colors.green, Icons.check_rounded);
+      }
+    }).whenComplete(() {
+      setLoadingState(false);
+
+      Future.delayed(Duration(seconds: 1), () {
+        setSelectedIndex(9);
+      });
+    });
+  }
+
+  Future getMySellersCount(BuildContext context) async {
+    return await _greenGoApi.getMySellersCount(context);
+  }
+
+  Future getMySells(BuildContext context) async {
+    return await _greenGoApi.getMySells(context);
+  }
+
+  Future cancelMyOrderItem(int id, BuildContext context) async {
+    setLoadingState(true);
+    return await _greenGoApi.cancelOrderItem(id, context).then((value) {
+      if (value != null)
+        showCustomSnackBar(
+            context, value['message'], Colors.green, Icons.check_rounded);
+    }).whenComplete(() => setLoadingState(false));
   }
 }

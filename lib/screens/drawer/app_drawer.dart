@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
 import 'package:green_go/components/widgets/list_custom_item.dart';
+import 'package:green_go/core/data/dialog_type.dart';
 import 'package:green_go/core/provider/home_provider.dart';
+import 'package:green_go/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -162,6 +164,18 @@ class AppDrawerScreen extends StatelessWidget {
 
   void _selectItem(int val, BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    homeProvider.setSelectedIndex(val);
+    if (val == 9 || val == 4 || val == 17) {
+      homeProvider.getAccessToken().then((value) {
+        if (value == null)
+          displayCustomDialog(
+              context, '_title', DialogType.AuthType, true, () {});
+        else
+          homeProvider.setSelectedIndex(val);
+      });
+    } else {
+      homeProvider.setSelectedIndex(val);
+    }
+
+    FocusScope.of(context).unfocus();
   }
 }

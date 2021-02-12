@@ -60,11 +60,11 @@ class NetworkCall {
       @required String method,
       @required BuildContext context,
       Map<String, dynamic> requestParams,
-      Map<String, dynamic> body,
+      dynamic body,
       bool isToken}) async {
     BaseOptions options;
     SharedPreferences _shared = await SharedPreferences.getInstance();
-    inspect(_shared.getString('accessToken'));
+
     options = BaseOptions(
       baseUrl: BASE_URL,
       method: method,
@@ -80,8 +80,8 @@ class NetworkCall {
     try {
       response =
           await dio.request(path, queryParameters: requestParams, data: body);
+
       log(" - Response - ", name: " api route -- $path");
-      print(" +++++ ${response.data}");
       return response.data;
     } on DioError catch (error) {
       // print(' --- req main errors +++++++++ $error');

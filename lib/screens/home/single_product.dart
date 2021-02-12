@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -47,16 +48,19 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 20.0.sp,
-            color: Colors.purple[400],
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 35),
+        child: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 20.0.sp,
+              color: Colors.purple[400],
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
@@ -65,119 +69,110 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.data == null)
                 return Center(child: const LoaderWidget());
+              inspect(snapshot.data);
               return Column(
                 children: [
                   Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 50),
-                                child: CarouselSlider.builder(
-                                  itemCount:
-                                      snapshot.data['data']['images'].length,
-                                  itemBuilder:
-                                      (BuildContext context, int itemIndex) =>
-                                          CachedNetworkImage(
-                                    imageUrl: snapshot.data['data']['images']
-                                        [itemIndex]['src'],
-                                    imageBuilder: (context, imageProvider) =>
-                                        Container(
-                                      decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: imageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    placeholder: (context, string) =>
-                                        const Center(
-                                      child: LoaderWidget(),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        Container(
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.error_outline_rounded,
-                                          color: Colors.red,
-                                          size: 25,
-                                        ),
-                                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Stack(
+                          children: [
+                            CarouselSlider.builder(
+                              itemCount: snapshot.data['data']['images'].length,
+                              itemBuilder:
+                                  (BuildContext context, int itemIndex) =>
+                                      CachedNetworkImage(
+                                imageUrl: snapshot.data['data']['images']
+                                    [itemIndex]['src'],
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  options: CarouselOptions(
-                                      height: 30.0.h,
-                                      viewportFraction: 1,
-                                      initialPage: 0,
-                                      enableInfiniteScroll: false,
-                                      reverse: false,
-                                      autoPlay: true,
-                                      autoPlayInterval: Duration(seconds: 5),
-                                      autoPlayAnimationDuration:
-                                          Duration(milliseconds: 800),
-                                      autoPlayCurve: Curves.fastOutSlowIn,
-                                      enlargeCenterPage: true,
-                                      scrollDirection: Axis.horizontal,
-                                      onPageChanged: (index, reason) {
-                                        _streamController.add(index);
-                                      }),
+                                ),
+                                placeholder: (context, string) => const Center(
+                                  child: LoaderWidget(),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.error_outline_rounded,
+                                      color: Colors.red,
+                                      size: 25,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Positioned(
-                                bottom: 5,
-                                left: 0,
-                                right: 0,
-                                child: StreamBuilder(
-                                    stream: _streamController.stream,
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot snapS) {
-                                      return Container(
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              for (var i = 0;
-                                                  i <
-                                                      snapshot
-                                                          .data['data']
-                                                              ['images']
-                                                          .length;
-                                                  i++)
-                                                Container(
-                                                  width: 8,
-                                                  height: 8,
-                                                  margin: EdgeInsets.symmetric(
-                                                      vertical: 10.0,
-                                                      horizontal: 2.0),
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: snapS.data == i
-                                                        ? AppStyle.colorGreen
-                                                        : Colors.grey[300],
-                                                  ),
-                                                )
-                                            ]),
-                                      );
-                                    }),
-                                // Positioned(
-                                //   top: 0,
-                                //   right: 0,
-                                //   child: IconButton(
-                                //     icon: Icon(
-                                //       Icons.share_outlined,
-                                //       size: 25.0.sp,
-                                //       color: AppStyle.colorPurple,
-                                //     ),
-                                //     onPressed: () {},
-                                //   ),
-                                // ),
-                              )
-                            ],
-                          ),
+                              options: CarouselOptions(
+                                  height: 30.0.h,
+                                  viewportFraction: 1,
+                                  initialPage: 0,
+                                  enableInfiniteScroll: false,
+                                  reverse: false,
+                                  autoPlay: true,
+                                  autoPlayInterval: Duration(seconds: 5),
+                                  autoPlayAnimationDuration:
+                                      Duration(milliseconds: 800),
+                                  autoPlayCurve: Curves.fastOutSlowIn,
+                                  enlargeCenterPage: true,
+                                  scrollDirection: Axis.horizontal,
+                                  onPageChanged: (index, reason) {
+                                    _streamController.add(index);
+                                  }),
+                            ),
+                            Positioned(
+                              bottom: 5,
+                              left: 0,
+                              right: 0,
+                              child: StreamBuilder(
+                                  stream: _streamController.stream,
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapS) {
+                                    return Container(
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            for (var i = 0;
+                                                i <
+                                                    snapshot
+                                                        .data['data']['images']
+                                                        .length;
+                                                i++)
+                                              Container(
+                                                width: 8,
+                                                height: 8,
+                                                margin: EdgeInsets.symmetric(
+                                                    vertical: 10.0,
+                                                    horizontal: 2.0),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: snapS.data == i
+                                                      ? AppStyle.colorPurple
+                                                      : Colors.grey[300],
+                                                ),
+                                              )
+                                          ]),
+                                    );
+                                  }),
+                              // Positioned(
+                              //   top: 0,
+                              //   right: 0,
+                              //   child: IconButton(
+                              //     icon: Icon(
+                              //       Icons.share_outlined,
+                              //       size: 25.0.sp,
+                              //       color: AppStyle.colorPurple,
+                              //     ),
+                              //     onPressed: () {},
+                              //   ),
+                              // ),
+                            )
+                          ],
                         ),
                       ),
                       Padding(
@@ -326,6 +321,10 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                       direction: Axis.horizontal,
                                     ),
                                   ),
+                                  Divider(
+                                    thickness: 3,
+                                    height: 30,
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
@@ -380,12 +379,15 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        homeProvider.addProductToCart(
+                            snapshot.data['data']['id'], context);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         child: Center(
                           child: Text(
-                            'ДОБАВИТЬ В КОРЗИНУ'.toUpperCase(),
+                            'ДОБАВИТЬ В КОРЗИНУ',
                             style: TextStyle(
                                 color: Colors.white, fontSize: 11.0.sp),
                           ),
@@ -571,6 +573,34 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                           );
                         }),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 15,
+                    ),
+                    child: OutlineButton(
+                      highlightColor: Colors.purple[100],
+                      padding: const EdgeInsets.all(5),
+                      highlightedBorderColor: Colors.purple,
+                      borderSide: BorderSide(
+                        color: AppStyle.colorPurple,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7, horizontal: 25),
+                        child: Text(
+                          "Перейти в магазин".toUpperCase(),
+                          style: TextStyle(
+                            color: AppStyle.colorPurple,
+                            fontSize: 11.0.sp,
+                          ),
+                        ),
+                      ),
+                      onPressed: () {},
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 3.0.h,
                   ),
@@ -724,34 +754,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                             },
                           );
                         }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 15,
-                    ),
-                    child: OutlineButton(
-                      highlightColor: Colors.purple[100],
-                      padding: const EdgeInsets.all(5),
-                      highlightedBorderColor: Colors.purple,
-                      borderSide: BorderSide(
-                        color: AppStyle.colorPurple,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 7, horizontal: 25),
-                        child: Text(
-                          "Перейти в магазин".toUpperCase(),
-                          style: TextStyle(
-                            color: AppStyle.colorPurple,
-                            fontSize: 11.0.sp,
-                          ),
-                        ),
-                      ),
-                      onPressed: () {},
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
                   ),
                   SizedBox(
                     height: 5.0.h,

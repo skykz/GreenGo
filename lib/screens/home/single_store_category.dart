@@ -37,16 +37,19 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
     inspect("ID -> ${dataStore['id']}");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_rounded,
-            size: 20.0.sp,
-            color: Colors.purple[400],
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 35),
+        child: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios_rounded,
+              size: 20.0.sp,
+              color: Colors.purple[400],
+            ),
+            onPressed: () => Navigator.pop(context),
           ),
-          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
@@ -155,94 +158,94 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
                 );
               }),
             ),
-            SizedBox(
-              height: 10.0.h,
-              child: Consumer<HomeProvider>(builder: (context, provider, _) {
-                return FutureBuilder(
-                    future: provider.getCatalogsProducts(
-                        context, false, dataStore['id']),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.data == null)
-                        return const Center(
-                          child: LoaderWidget(),
-                        );
+            // SizedBox(
+            //   height: 10.0.h,
+            //   child: Consumer<HomeProvider>(builder: (context, provider, _) {
+            //     return FutureBuilder(
+            //         future: provider.getCatalogsProducts(
+            //             context, false, dataStore['id']),
+            //         builder: (BuildContext context, AsyncSnapshot snapshot) {
+            //           if (snapshot.data == null)
+            //             return const Center(
+            //               child: LoaderWidget(),
+            //             );
 
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Center(
-                                child: FlatButton(
-                                  color: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: Colors.purple,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    '${dataStore['title']}',
-                                    style: TextStyle(
-                                      fontSize: 10.0.sp,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            for (var index = 0;
-                                index < snapshot.data['data'].length;
-                                index++)
-                              Padding(
-                                padding: const EdgeInsets.all(8),
-                                child: Center(
-                                  child: FlatButton(
-                                    color: provider.getSelectedCategoryIndex ==
-                                            index
-                                        ? Colors.white
-                                        : AppStyle.colorGreen,
-                                    shape: RoundedRectangleBorder(
-                                      side: provider.getSelectedCategoryIndex ==
-                                              index
-                                          ? BorderSide(
-                                              color: Colors.purple,
-                                              width: 1,
-                                            )
-                                          : BorderSide(
-                                              color: AppStyle.colorGreen,
-                                              width: 1,
-                                            ),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    onPressed: () {
-                                      log("${snapshot.data['data'][index]['id']}");
-                                      provider.setSelectedCategoryIndex(index);
-                                      provider.setSelectedCategoryId(index);
-                                    },
-                                    child: Text(
-                                      '${snapshot.data['data'][index]['title']}',
-                                      style: TextStyle(
-                                        fontSize: 10.0.sp,
-                                        color:
-                                            provider.getSelectedCategoryIndex ==
-                                                    index
-                                                ? Colors.black
-                                                : Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                          ],
-                        ),
-                      );
-                    });
-              }),
-            ),
+            //           return SingleChildScrollView(
+            //             scrollDirection: Axis.horizontal,
+            //             child: Row(
+            //               children: [
+            //                 Padding(
+            //                   padding: const EdgeInsets.all(8),
+            //                   child: Center(
+            //                     child: FlatButton(
+            //                       color: Colors.white,
+            //                       shape: RoundedRectangleBorder(
+            //                         side: BorderSide(
+            //                           color: Colors.purple,
+            //                           width: 1,
+            //                         ),
+            //                         borderRadius: BorderRadius.circular(20),
+            //                       ),
+            //                       onPressed: () {},
+            //                       child: Text(
+            //                         '${dataStore['title']}',
+            //                         style: TextStyle(
+            //                           fontSize: 10.0.sp,
+            //                           color: Colors.black,
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 for (var index = 0;
+            //                     index < snapshot.data['data'].length;
+            //                     index++)
+            //                   Padding(
+            //                     padding: const EdgeInsets.all(8),
+            //                     child: Center(
+            //                       child: FlatButton(
+            //                         color: provider.getSelectedCategoryIndex ==
+            //                                 index
+            //                             ? Colors.white
+            //                             : AppStyle.colorGreen,
+            //                         shape: RoundedRectangleBorder(
+            //                           side: provider.getSelectedCategoryIndex ==
+            //                                   index
+            //                               ? BorderSide(
+            //                                   color: Colors.purple,
+            //                                   width: 1,
+            //                                 )
+            //                               : BorderSide(
+            //                                   color: AppStyle.colorGreen,
+            //                                   width: 1,
+            //                                 ),
+            //                           borderRadius: BorderRadius.circular(20),
+            //                         ),
+            //                         onPressed: () {
+            //                           log("${snapshot.data['data'][index]['id']}");
+            //                           provider.setSelectedCategoryIndex(index);
+            //                           provider.setSelectedCategoryId(index);
+            //                         },
+            //                         child: Text(
+            //                           '${snapshot.data['data'][index]['title']}',
+            //                           style: TextStyle(
+            //                             fontSize: 10.0.sp,
+            //                             color:
+            //                                 provider.getSelectedCategoryIndex ==
+            //                                         index
+            //                                     ? Colors.black
+            //                                     : Colors.white,
+            //                           ),
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   )
+            //               ],
+            //             ),
+            //           );
+            //         });
+            //   }),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -314,7 +317,7 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
                           padding: const EdgeInsets.all(10),
                           itemBuilder: (BuildContext context, int index) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
                               child: Stack(
                                 children: [
                                   InkWell(

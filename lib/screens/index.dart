@@ -18,7 +18,7 @@ import 'package:green_go/services/push_services.dart';
 import 'package:green_go/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'carts/cart_screen.dart';
+import 'carts/cart_order_screen.dart';
 import 'category/category_screen.dart';
 import 'category/store_screen.dart';
 import 'create/create_product.dart';
@@ -92,7 +92,6 @@ class _IndexScreenState extends State<IndexScreen> {
     final homeProvder = Provider.of<HomeProvider>(context);
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
 
-    log("selected index of screen --> ${homeProvder.getSelectedIndex}");
     return SafeArea(
       child: Stack(
         fit: StackFit.expand,
@@ -101,7 +100,7 @@ class _IndexScreenState extends State<IndexScreen> {
             resizeToAvoidBottomPadding: true,
             key: _scaffoldKey,
             appBar: PreferredSize(
-              preferredSize: Size(double.infinity, 18.0.h),
+              preferredSize: Size(double.infinity, 15.5.h),
               child: AppBar(
                 elevation: 10,
                 backgroundColor: Colors.white,
@@ -135,76 +134,79 @@ class _IndexScreenState extends State<IndexScreen> {
                 ),
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
-                  background: Center(
-                    child: Container(
-                      color: Colors.grey,
-                    ),
-                  ),
                   title: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 7,
-                              color: Colors.grey[200],
-                              spreadRadius: 0,
-                              offset: Offset(0, 5),
-                            )
-                          ]),
-                      child: TextField(
-                        cursorColor: Colors.purple,
-                        cursorRadius: Radius.circular(10.0),
-                        cursorWidth: 2,
-                        controller: _searchTextController,
-                        onTap: () {
-                          final homeProvider =
-                              Provider.of<HomeProvider>(context, listen: false);
-                          homeProvider.setSelectedIndex(7);
-                        },
-                        keyboardType: TextInputType.text,
-                        onChanged: (val) {
-                          final homeProvider =
-                              Provider.of<HomeProvider>(context, listen: false);
-                          homeProvider.doSearch(val, context);
-                        },
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 0),
-                          hintStyle: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[400],
-                          ),
-                          hintText: 'Попробуйте \'Розы\'',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            gapPadding: 4,
-                            borderSide: BorderSide(
-                              color: Colors.grey[200],
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.purple),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Colors.grey.withOpacity(0.2),
-                            ),
-                          ),
-                          suffixIcon: IconButton(
-                              icon: Icon(Icons.search,
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                      left: 16,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 7,
+                                  color: Colors.grey[200],
+                                  spreadRadius: 0,
+                                  offset: Offset(0, 5),
+                                )
+                              ]),
+                          child: TextField(
+                            cursorColor: Colors.purple,
+                            cursorRadius: Radius.circular(10.0),
+                            cursorWidth: 2,
+                            controller: _searchTextController,
+                            onTap: () {
+                              final homeProvider = Provider.of<HomeProvider>(
+                                  context,
+                                  listen: false);
+                              homeProvider.setSelectedIndex(7);
+                            },
+                            keyboardType: TextInputType.text,
+                            onChanged: (val) {
+                              final homeProvider = Provider.of<HomeProvider>(
+                                  context,
+                                  listen: false);
+                              homeProvider.doSearch(val, context);
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 0),
+                              hintStyle: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[400],
+                              ),
+                              hintText: 'Попробуйте \'Розы\'',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[200],
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Colors.purple),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  color: Colors.grey.withOpacity(0.2),
+                                ),
+                              ),
+                              prefixIcon: const Icon(Icons.search,
                                   color: Colors.purple, size: 25),
-                              onPressed: () {}),
+                            ),
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -221,6 +223,7 @@ class _IndexScreenState extends State<IndexScreen> {
                     backgroundColor: AppStyle.colorPurple,
                     onPressed: () {
                       _searchTextController.clear();
+                      homeProvder.foundedList = null;
                       homeProvder.getAccessToken().then((value) {
                         if (value == null)
                           displayCustomDialog(context, '_title',
@@ -247,15 +250,16 @@ class _IndexScreenState extends State<IndexScreen> {
                   : 0,
               selectedItemColor: AppStyle.colorPurple,
               unselectedLabelStyle: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
               ),
               selectedLabelStyle: TextStyle(
-                fontSize: 12,
+                fontSize: 11,
                 color: AppStyle.colorPurple,
               ),
               onTap: (final int ind) {
                 _searchTextController.clear();
-
+                homeProvder.foundedList = null;
+                FocusScope.of(context).unfocus();
                 if (ind == 4) {
                   homeProvder.getAccessToken().then((value) {
                     inspect(value);
@@ -272,8 +276,8 @@ class _IndexScreenState extends State<IndexScreen> {
               items: [
                 BottomNavigationBarItem(
                   icon: SizedBox(
-                    height: 6.0.h,
-                    width: 6.0.w,
+                    height: 5.0.h,
+                    width: 5.0.w,
                     child: SvgPicture.asset(
                       'assets/images/svg/home.svg',
                       color: homeProvder.getSelectedIndex <= 4
@@ -287,8 +291,8 @@ class _IndexScreenState extends State<IndexScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(
-                    height: 6.0.h,
-                    width: 6.0.w,
+                    height: 5.0.h,
+                    width: 5.0.w,
                     child: SvgPicture.asset(
                       'assets/images/svg/shop.svg',
                       color: homeProvder.getSelectedIndex == 1
@@ -307,8 +311,8 @@ class _IndexScreenState extends State<IndexScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(
-                    height: 6.0.h,
-                    width: 6.0.w,
+                    height: 5.0.h,
+                    width: 5.0.w,
                     child: SvgPicture.asset(
                       'assets/images/svg/favorite.svg',
                       color: homeProvder.getSelectedIndex == 3
@@ -320,8 +324,8 @@ class _IndexScreenState extends State<IndexScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(
-                    height: 6.0.h,
-                    width: 6.0.w,
+                    height: 5.0.h,
+                    width: 5.0.w,
                     child: SvgPicture.asset(
                       'assets/images/svg/card.svg',
                       color: homeProvder.getSelectedIndex == 4

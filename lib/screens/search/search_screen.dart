@@ -50,10 +50,6 @@ class SearchListItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
 
-    if (homeProvider.getIsLoading)
-      return const Center(
-        child: LoaderWidget(),
-      );
     if (homeProvider.foundedList == null)
       Center(
         child: Padding(
@@ -76,7 +72,7 @@ class SearchListItems extends StatelessWidget {
               itemCount: homeProvider.foundedList != null
                   ? homeProvider.foundedList['data'].length
                   : 0,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.only(left: 20, right: 20, bottom: 30),
               itemBuilder: (BuildContext context, int index) {
                 if (homeProvider.foundedList['data'].length == 0)
                   return Center(
@@ -86,7 +82,7 @@ class SearchListItems extends StatelessWidget {
                     ),
                   );
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Stack(
                     children: [
                       InkWell(

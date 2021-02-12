@@ -67,10 +67,40 @@ Map<String, String> sortTypes = {
   'Новизна': 'createdAt,desc',
 };
 
+Map<String, String> typeOfShipping = {
+  'Самовывоз': 'pickup',
+  'Доставка': 'delivery',
+};
+
+Map<String, String> paymentType = {
+  'Наличными': 'cash',
+  'Kaspi.kz перевод': 'card',
+};
+
 launchURL(String _tel) async {
   if (await canLaunch('$_tel')) {
     await launch('$_tel');
   } else {
     throw 'Could not launch $_tel';
+  }
+}
+
+String getStatus(String _val) {
+  switch (_val) {
+    case 'formed':
+      return 'В обработке';
+      break;
+    case 'sold':
+      return 'Обработан';
+      break;
+    case 'canceled':
+      return 'Отменен';
+      break;
+    case 'active':
+      return 'Активен';
+      break;
+    default:
+      return '';
+      break;
   }
 }

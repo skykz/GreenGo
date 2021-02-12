@@ -7,7 +7,9 @@ import 'package:sizer/sizer.dart';
 
 class CreateViewFeedbackScreen extends StatelessWidget {
   final bool isView;
-  CreateViewFeedbackScreen({Key key, this.isView = false}) : super(key: key);
+  final bool isStore;
+  CreateViewFeedbackScreen({Key key, this.isView = false, this.isStore = false})
+      : super(key: key);
   final _textSearcTextController = TextEditingController();
 
   @override
@@ -15,29 +17,33 @@ class CreateViewFeedbackScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios_rounded,
-              size: 20.0.sp,
-              color: Colors.purple[400],
+        appBar: PreferredSize(
+          preferredSize: Size(double.infinity, 35),
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios_rounded,
+                size: 20.0.sp,
+                color: Colors.purple[400],
+              ),
+              onPressed: () => Navigator.pop(context),
             ),
-            onPressed: () => Navigator.pop(context),
           ),
         ),
         body: !this.isView
             ? SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 26),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(30),
                         child: Text(
-                          'ОТЗЫВ О МАГАЗИНЕ',
+                          isStore ? 'ОТЗЫВ О МАГАЗИНЕ' : 'ОТЗЫВ О ТОВАРЕ',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0.sp,
@@ -138,10 +144,11 @@ class CreateViewFeedbackScreen extends StatelessWidget {
               )
             : ListView.builder(
                 itemCount: 3,
+                padding: const EdgeInsets.only(bottom: 30),
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 10),
+                    padding:
+                        const EdgeInsets.only(left: 25, right: 25, bottom: 12),
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
@@ -203,7 +210,7 @@ class CreateViewFeedbackScreen extends StatelessWidget {
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 13.0.sp,
+                                      fontSize: 12.0.sp,
                                     ),
                                   ),
                                   RatingBarIndicator(

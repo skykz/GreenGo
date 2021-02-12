@@ -3,8 +3,7 @@ import 'package:green_go/screens/products/products_list_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class CartsHistoryItemScreen extends StatelessWidget {
-  final dynamic snapshot;
-  const CartsHistoryItemScreen({Key key, this.snapshot}) : super(key: key);
+  const CartsHistoryItemScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,10 @@ class CartsHistoryItemScreen extends StatelessWidget {
           Expanded(
             child: TabBarView(children: [
               ProductListScreen(),
-              ProductListScreen(),
+              ProductListScreen(
+                isArchive: true,
+              ),
+              // Text('dfsdf'),
             ]),
           ),
         ],

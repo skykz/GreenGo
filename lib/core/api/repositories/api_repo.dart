@@ -1,5 +1,7 @@
 import 'dart:core';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/core/api/network/network_call.dart';
 
@@ -25,32 +27,40 @@ class GreenGoApi {
   //search by query
   static const DO_SEARCH = 'search';
 
+  // address
+  static const GET_ADDRESS_LIST = 'my/addresses';
+  static const ADDRESS = 'addresses';
+
   //Cart
   static const GET_CART = 'cart/items?filter[sellerId]=1';
   static const MY_CART = 'my/cart';
   static const CART = 'cart';
-  static const DELETE_FROM_CART = 'cart/products/1';
 
   //Categories
   static const GET_CATEGORIES_CATALOG = 'categories';
 
   //Orders
-  static const GET_ORDER = 'orders/1';
+  static const CREATE_ORDER = 'orders/from-cart';
   static const GET_LIST_ORDER = 'orders';
+  static const GET_ORDER_HISTORY = 'my/orders?with[seller]&with[products]';
 
   //Products
   static const GET_PRODUCT = 'products';
+  static const GET_MY_PRODUCT = 'my/products';
+
   static const GET_LIST_FILTERED_PRODUCTS =
       'product/?filter[categoryId]=2&sort[]=cost,desc';
   static const GET_PRODUCT_REVIEWS = 'products/1/reviews';
 
   //Sellers
-  static const GET_SELLER = 'sellers/1';
+  static const GET_MY_SELLER_COUNT = 'my/sells-count';
+  static const GET_MY_SELLS = 'my/sells';
   static const GET_LIST_SELLERS = 'products/1';
   static const GET_REVEIW_SELLERS = 'sellers/1/reviews';
 
   // Stores
   static const GET_STORES_LIST = 'stores';
+  static const UPLOAD_FILES = 'files';
 
   Future<dynamic> authLogin(String _phone, String _pinCode,
       [BuildContext context]) async {
@@ -247,6 +257,146 @@ class GreenGoApi {
         body: {
           'count': count,
         });
+    return response;
+  }
+
+  Future<dynamic> createOrderFromCart(Map<String, dynamic> _body,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: CREATE_ORDER,
+      method: 'POST',
+      context: context,
+      body: _body,
+    );
+    return response;
+  }
+
+  Future<dynamic> addItemToCart(int _productId, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: CART,
+      method: 'POST',
+      context: context,
+      body: {
+        "productId": _productId,
+        "count": 1,
+      },
+    );
+    return response;
+  }
+
+  Future<dynamic> getAddressUser([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: GET_ADDRESS_LIST,
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> getOrderHistory(bool _isArchive,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: GET_ORDER_HISTORY +
+          '${_isArchive ? '&filter[status]=not:formed' : '&filter[status]=formed'}',
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> setNewAddressStatus(int _addId, String _value, bool _isMain,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: ADDRESS + '/$_addId',
+        method: 'PATCH',
+        context: context,
+        body: {
+          "value": _value,
+          'isMain': _isMain,
+        });
+    return response;
+  }
+
+  Future<dynamic> uploadImage(File _file, [BuildContext context]) async {
+    String fileName = _file.path.split('/').last;
+    dynamic formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(_file.path, filename: fileName),
+    });
+    dynamic response = await _networkCall.doRequestMain(
+      path: UPLOAD_FILES,
+      method: 'POST',
+      context: context,
+      body: formData,
+    );
+    return response;
+  }
+
+  Future<dynamic> getMyProductsActive([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: GET_MY_PRODUCT,
+        method: 'GET',
+        context: context,
+        requestParams: {
+          ' filter[status]': 'active',
+        });
+    return response;
+  }
+
+  Future<dynamic> getMyProductsNotActive([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: GET_MY_PRODUCT,
+        method: 'GET',
+        context: context,
+        requestParams: {
+          ' filter[status]': 'not:active',
+        });
+    return response;
+  }
+
+  Future<dynamic> createProducts(int cost, String _title, String _desc,
+      bool canPickup, bool canDeliver, List<int> _imageId,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: GET_PRODUCT,
+        method: 'POST',
+        context: context,
+        body: {
+          "cost": cost,
+          "title": _title,
+          "description": _desc,
+          "canPickup": canPickup,
+          "canDeliver": canDeliver,
+          "images": _imageId,
+        });
+    return response;
+  }
+
+  Future<dynamic> getMySellersCount([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: GET_MY_SELLER_COUNT,
+      method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> cancelOrderItem(int id, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+        path: GET_PRODUCT + "/$id",
+        method: 'PATCH',
+        context: context,
+        body: {
+          "status": "canceled",
+        });
+    return response;
+  }
+
+  Future<dynamic> getMySells([BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: GET_MY_SELLS,
+      method: 'GET',
+      context: context,
+    );
     return response;
   }
 }

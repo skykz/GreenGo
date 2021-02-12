@@ -65,7 +65,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30),
+            padding: const EdgeInsets.symmetric(vertical: 18),
             child: FutureBuilder(
                 future: getBanners,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -128,7 +128,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 ),
               ),
               SizedBox(
-                height: 40.0.h,
+                height: 36.0.h,
                 child: FutureBuilder(
                     future: getCatalogProducts,
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -176,48 +176,55 @@ class _HomeWidgetState extends State<HomeWidget> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    CachedNetworkImage(
-                                      imageUrl: snapshot.data['data'][index]
-                                          ['avatar'],
-                                      imageBuilder: (context, imageProvider) =>
-                                          Center(
-                                        child: Container(
-                                          width: 65,
-                                          height: 65,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
+                                    Flexible(
+                                      flex: 2,
+                                      child: CachedNetworkImage(
+                                        imageUrl: snapshot.data['data'][index]
+                                            ['avatar'],
+                                        imageBuilder:
+                                            (context, imageProvider) => Center(
+                                          child: Container(
+                                            width: 55,
+                                            height: 55,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      placeholder: (context, string) => Center(
-                                        child: LoaderWidget(),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          Container(
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.error_outline_rounded,
-                                            color: Colors.red,
-                                            size: 25,
+                                        placeholder: (context, string) =>
+                                            Center(
+                                          child: LoaderWidget(),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Container(
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.error_outline_rounded,
+                                              color: Colors.red,
+                                              size: 25,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
                                     Flexible(
+                                        flex: 2,
                                         child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8),
-                                      child: Text(
-                                        "${snapshot.data['data'][index]['title']}",
-                                        style: TextStyle(),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Text(
+                                            "${snapshot.data['data'][index]['title']}",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        )),
                                   ],
                                 ),
                               ),

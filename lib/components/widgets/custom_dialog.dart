@@ -97,7 +97,12 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  final homeProvider =
+                      Provider.of<HomeProvider>(context, listen: false);
+                  Navigator.of(context, rootNavigator: true).pop();
+                  homeProvider.setSelectedIndex(0);
+                },
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -120,7 +125,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                 ),
                 highlightColor: Colors.grey[300],
                 highlightedBorderColor: Colors.purple,
-                onPressed: () {},
+                onPressed: this.widget.onPressed,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(

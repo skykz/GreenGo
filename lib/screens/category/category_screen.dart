@@ -75,62 +75,67 @@ class ListCatergoryScreen extends StatelessWidget {
                     return const Center(
                       child: LoaderWidget(),
                     );
-                  inspect(snapshot.data['data']);
-                  return Expanded(
-                    child: Center(
-                      child: ListView.builder(
-                        itemCount: snapshot.data['data'].length + 1,
-                        shrinkWrap: true,
-                        reverse: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == snapshot.data['data'].length)
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10),
-                              child: CardLongWidget(
-                                onTap: () {
-                                  final homeProvider =
-                                      Provider.of<HomeProvider>(context,
-                                          listen: false);
 
-                                  if (selfArgument != null)
-                                    Navigator.pushNamed(
-                                        context, '/singleCategory',
-                                        arguments: selfArgument);
-                                  else
-                                    homeProvider.setSelectedIndex(0);
-                                },
-                                title: selfArgument == null
-                                    ? 'Все категории'
-                                    : 'Все подкатегории',
-                              ),
-                            );
-                          return Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10),
-                              child: CardLongWidget(
-                                onTap: () {
-                                  if (selfArgument == null) {
-                                    if (snapshot.data['data'][index]
-                                        ['isParent']) {
-                                      Navigator.pushReplacementNamed(
-                                          context, '/',
-                                          arguments: snapshot.data['data']
-                                              [index]);
-                                    }
-                                  } else {
-                                    Navigator.pushNamed(
-                                        context, '/singleCategory',
-                                        arguments: snapshot.data['data']
-                                            [index]);
-                                  }
-                                },
-                                title: snapshot.data['data'][index]['title'],
-                              ),
+                  return Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 10),
+                            child: CardLongWidget(
+                              onTap: () {
+                                final homeProvider = Provider.of<HomeProvider>(
+                                    context,
+                                    listen: false);
+
+                                if (selfArgument != null)
+                                  Navigator.pushNamed(
+                                      context, '/singleCategory',
+                                      arguments: selfArgument);
+                                else
+                                  homeProvider.setSelectedIndex(0);
+                              },
+                              title: selfArgument == null
+                                  ? 'Все категории'
+                                  : 'Все подкатегории',
                             ),
-                          );
-                        },
+                          ),
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.only(bottom: 30),
+                            itemCount: snapshot.data['data'].length,
+                            shrinkWrap: true,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 10),
+                                  child: CardLongWidget(
+                                    onTap: () {
+                                      if (selfArgument == null) {
+                                        if (snapshot.data['data'][index]
+                                            ['isParent']) {
+                                          Navigator.pushReplacementNamed(
+                                              context, '/',
+                                              arguments: snapshot.data['data']
+                                                  [index]);
+                                        }
+                                      } else {
+                                        Navigator.pushNamed(
+                                            context, '/singleCategory',
+                                            arguments: snapshot.data['data']
+                                                [index]);
+                                      }
+                                    },
+                                    title: snapshot.data['data'][index]
+                                        ['title'],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   );

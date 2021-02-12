@@ -30,7 +30,7 @@ class ShowcaseListProducts extends StatelessWidget {
               return Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(3),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(8),
                       onTap: () {
@@ -62,8 +62,8 @@ class ShowcaseListProducts extends StatelessWidget {
                               imageUrl: snapshot.data['data'][index]['avatar'],
                               imageBuilder: (context, imageProvider) => Center(
                                 child: Container(
-                                  width: 80,
-                                  height: 80,
+                                  width: 88,
+                                  height: 88,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     image: DecorationImage(
