@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/core/data/dialog_type.dart';
@@ -32,7 +30,6 @@ class NetworkCall {
     BaseOptions options = BaseOptions(
       headers: {'Accept': 'application/json'},
       baseUrl: BASE_URL, //base server url
-
       method: method,
       contentType: 'application/json',
     );
