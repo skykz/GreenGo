@@ -41,95 +41,99 @@ class _ProductsScreenState extends State<ProductsScreen>
                 child: LoaderWidget(),
               );
             return Scaffold(
-              resizeToAvoidBottomPadding: false,
-              body: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: TabBar(
-                        controller: _tabController,
-                        unselectedLabelColor: Color(0xff9E1AEF),
-                        indicatorSize: TabBarIndicatorSize.label,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Color(0xff9E1AEF),
-                        ),
-                        tabs: [
-                          Tab(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                border: Border.all(
-                                    color: Color(0xff9E1AEF), width: 1),
-                              ),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: const Text("ВАШИ ТОВАРЫ"),
-                              ),
+                resizeToAvoidBottomPadding: false,
+                body: NestedScrollView(
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      SliverAppBar(
+                        pinned: false,
+                        toolbarHeight: 10,
+                        backgroundColor: Colors.white,
+                        bottom: TabBar(
+                            controller: _tabController,
+                            unselectedLabelColor: Color(0xff9E1AEF),
+                            indicatorSize: TabBarIndicatorSize.label,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Color(0xff9E1AEF),
                             ),
-                          ),
-                          Stack(
-                            children: [
+                            tabs: [
                               Tab(
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(50),
                                     border: Border.all(
-                                      color: Color(0xff9E1AEF),
-                                      width: 1,
-                                    ),
+                                        color: Color(0xff9E1AEF), width: 1),
                                   ),
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: const Text("НОВАЯ ПРОДАЖА"),
+                                    child: const Text("ВАШИ ТОВАРЫ"),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                      color: AppStyle.colorPurple,
-                                      borderRadius: BorderRadius.circular(50),
-                                      border: Border.all(
-                                        color: Colors.white,
-                                        width: 1,
-                                      )),
-                                  child: Center(
-                                    child: Text(
-                                      snapshot.data['data']['count'].toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 9.0.sp,
+                              Stack(
+                                children: [
+                                  Tab(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        border: Border.all(
+                                          color: Color(0xff9E1AEF),
+                                          width: 1,
+                                        ),
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: const Text("НОВАЯ ПРОДАЖА"),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ]),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: BoxDecoration(
+                                          color: AppStyle.colorPurple,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 1,
+                                          )),
+                                      child: Center(
+                                        child: Text(
+                                          snapshot.data['data']['count']
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 9.0.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ]),
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: _tabController,
+                    children: [
+                      ProductsStatusScreen(
+                        isMyProduct: true,
+                      ),
+                      ProductListScreen(
+                        isMyProduct: true,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: TabBarView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: _tabController,
-                      children: [
-                        ProductsStatusScreen(
-                          isMyProduct: true,
-                        ),
-                        ProductListScreen(
-                          isMyProduct: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
+                ));
           }),
     );
   }

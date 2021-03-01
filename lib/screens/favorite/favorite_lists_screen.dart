@@ -46,7 +46,7 @@ class FavoriteListWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
       itemBuilder: (BuildContext context, int index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 5),
           child: Stack(
             children: [
               InkWell(

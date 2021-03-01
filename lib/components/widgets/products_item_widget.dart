@@ -11,7 +11,6 @@ import 'loader_widget.dart';
 class ProductsStatusList extends StatelessWidget {
   final bool isArchive;
   final bool isMyProduct;
-
   final dynamic listData;
 
   const ProductsStatusList(
@@ -183,42 +182,48 @@ class ProductsStatusList extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Divider(
-                        thickness: 3,
-                        height: 1,
-                        color: Colors.grey[300],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, bottom: 20, top: 20),
-                        child: OutlineButton(
-                          color: AppStyle.colorPurple,
-                          onPressed: () {
-                            homeProvider.cancelMyOrderItem(
-                                snapshot.data['data'][index]['id'], context);
-                          },
-                          borderSide: BorderSide(
-                            color: Colors.purple,
-                          ),
-                          highlightedBorderColor: Colors.purple,
-                          splashColor: Colors.purple[100],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: Text(
-                                'Отменить товар'.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 10.0.sp,
-                                  color: AppStyle.colorPurple,
+                      this.isArchive
+                          ? const SizedBox()
+                          : Divider(
+                              thickness: 3,
+                              height: 1,
+                              color: Colors.grey[300],
+                            ),
+                      this.isArchive
+                          ? const SizedBox()
+                          : Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 20, top: 20),
+                              child: OutlineButton(
+                                color: AppStyle.colorPurple,
+                                onPressed: () {
+                                  homeProvider.cancelMyOrderItem(
+                                      snapshot.data['data'][index]['id'],
+                                      context);
+                                },
+                                borderSide: BorderSide(
+                                  color: Colors.purple,
+                                ),
+                                highlightedBorderColor: Colors.purple,
+                                splashColor: Colors.purple[100],
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 5),
+                                    child: Text(
+                                      'Отменить товар'.toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 10.0.sp,
+                                        color: AppStyle.colorPurple,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      )
+                            )
                     ],
                   ),
                 ),

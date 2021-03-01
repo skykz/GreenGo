@@ -48,7 +48,6 @@ class _HomeWidgetState extends State<HomeWidget> {
   @override
   void initState() {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    getTopProducts = homeProvider.getTopProducts(context);
     getWindowProducts = homeProvider.getWindowProducts(context);
     getCatalogProducts = homeProvider.getCatalogsProducts(context, true);
     getBanners = homeProvider.getBannerList(context);
@@ -244,9 +243,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
               ),
-              ListTopProducts(
-                future: getTopProducts,
-              ),
+              ListTopProducts(),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10, top: 20),
                 child: Text(

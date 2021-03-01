@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -78,7 +76,7 @@ class SearchListItems extends StatelessWidget {
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 50),
-                      child: const Text('Нету данных!'),
+                      child: const Text('Нет данных!'),
                     ),
                   );
                 return Padding(

@@ -36,6 +36,11 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
   final _smsTextController = TextEditingController();
   final _pinPasswordController = TextEditingController();
 
+  final _streetController = TextEditingController();
+  final _aprtController = TextEditingController();
+  final _podestController = TextEditingController();
+  final _aprtNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -48,6 +53,7 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
   }
 
   _setDialogType(DialogType dialogType) {
+    final homeProvider = Provider.of<HomeProvider>(context);
     switch (dialogType) {
       case DialogType.AuthType:
         return Consumer<HomeProvider>(
@@ -142,77 +148,44 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
         );
         break;
       case DialogType.AddressType:
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Text(
-                  'Новый адрес:',
-                  style: TextStyle(
-                    fontSize: 14.5.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: TextField(
-                  cursorColor: Colors.purple,
-                  cursorRadius: Radius.circular(10.0),
-                  cursorWidth: 2,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    hintStyle: TextStyle(
-                      fontSize: 12.0.sp,
-                      color: Colors.grey[400],
-                    ),
-                    hintText: 'Улица',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      gapPadding: 4,
-                      borderSide: BorderSide(
-                        color: Colors.black38,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Colors.purple),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        color: Colors.black38,
-                      ),
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontSize: 13.0.sp,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Row(
+        if (homeProvider.getIsLoading) return Center(child: LoaderWidget());
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: SizedBox(
+            height: 42.0.h,
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Flexible(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        'Новый адрес:',
+                        style: TextStyle(
+                          fontSize: 14.5.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
                       child: TextField(
                         cursorColor: Colors.purple,
                         cursorRadius: Radius.circular(10.0),
                         cursorWidth: 2,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
+                        controller: _streetController,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 8),
                           hintStyle: TextStyle(
-                            fontSize: 12.0.sp,
+                            fontSize: 11.0.sp,
                             color: Colors.grey[400],
                           ),
-                          hintText: 'Дом',
+                          hintText: 'Улица',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                             gapPadding: 4,
@@ -236,108 +209,164 @@ class _CustomActionDialogState extends State<CustomActionDialog> {
                         ),
                       ),
                     ),
-                    Flexible(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: TextField(
-                          cursorColor: Colors.purple,
-                          cursorRadius: Radius.circular(10.0),
-                          cursorWidth: 2,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 8),
-                            hintStyle: TextStyle(
-                              fontSize: 12.0.sp,
-                              color: Colors.grey[400],
-                            ),
-                            hintText: 'Подъезд',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              gapPadding: 4,
-                              borderSide: BorderSide(
-                                color: Colors.black38,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: TextField(
+                              cursorColor: Colors.purple,
+                              cursorRadius: Radius.circular(10.0),
+                              cursorWidth: 2,
+                              keyboardType: TextInputType.number,
+                              controller: _aprtController,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                hintStyle: TextStyle(
+                                  fontSize: 11.0.sp,
+                                  color: Colors.grey[400],
+                                ),
+                                hintText: 'Дом',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gapPadding: 4,
+                                  borderSide: BorderSide(
+                                    color: Colors.black38,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Colors.purple),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Colors.black38,
+                                  ),
+                                ),
                               ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(color: Colors.purple),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Colors.black38,
+                              style: TextStyle(
+                                fontSize: 13.0.sp,
                               ),
                             ),
                           ),
-                          style: TextStyle(
-                            fontSize: 13.0.sp,
+                          Flexible(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: TextField(
+                                cursorColor: Colors.purple,
+                                cursorRadius: Radius.circular(10.0),
+                                cursorWidth: 2,
+                                keyboardType: TextInputType.number,
+                                controller: _podestController,
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  hintStyle: TextStyle(
+                                    fontSize: 10.0.sp,
+                                    color: Colors.grey[400],
+                                  ),
+                                  hintText: 'Подъезд',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    gapPadding: 4,
+                                    borderSide: BorderSide(
+                                      color: Colors.black38,
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide:
+                                        BorderSide(color: Colors.purple),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                      color: Colors.black38,
+                                    ),
+                                  ),
+                                ),
+                                style: TextStyle(
+                                  fontSize: 13.0.sp,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Flexible(
+                            child: TextField(
+                              cursorColor: Colors.purple,
+                              cursorRadius: Radius.circular(10.0),
+                              cursorWidth: 2,
+                              keyboardType: TextInputType.number,
+                              controller: _aprtNumberController,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 8),
+                                hintStyle: TextStyle(
+                                  fontSize: 11.0.sp,
+                                  color: Colors.grey[400],
+                                ),
+                                hintText: 'Квартира',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gapPadding: 4,
+                                  borderSide: BorderSide(
+                                    color: Colors.black38,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(color: Colors.purple),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Colors.black38,
+                                  ),
+                                ),
+                              ),
+                              style: TextStyle(
+                                fontSize: 13.0.sp,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Flexible(
-                      child: TextField(
-                        cursorColor: Colors.purple,
-                        cursorRadius: Radius.circular(10.0),
-                        cursorWidth: 2,
-                        inputFormatters: [_phoneValueController],
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 8),
-                          hintStyle: TextStyle(
-                            fontSize: 12.0.sp,
-                            color: Colors.grey[400],
-                          ),
-                          hintText: 'Квартира',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            gapPadding: 4,
-                            borderSide: BorderSide(
-                              color: Colors.black38,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Colors.purple),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Colors.black38,
-                            ),
-                          ),
+                    SizedBox(
+                      height: 3.0.h,
+                    ),
+                    Builder(
+                      builder: (ctx) => FlatButton(
+                        onPressed: () => homeProvider.addNewAddress(
+                            _streetController.text,
+                            _aprtController.text,
+                            _podestController.text,
+                            _aprtNumberController.text,
+                            ctx),
+                        color: AppStyle.colorGreen,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        style: TextStyle(
-                          fontSize: 13.0.sp,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            child: Text(
+                              'Добавить',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: 3.0.h,
-              ),
-              FlatButton(
-                onPressed: () {},
-                color: AppStyle.colorGreen,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 13),
-                    child: Text(
-                      'Добавить',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
         break;

@@ -9,15 +9,10 @@ import 'package:sizer/sizer.dart';
 
 import 'loader_widget.dart';
 
-class SingleStoreWidget extends StatefulWidget {
+class SingleStoreWidget extends StatelessWidget {
   final dynamic data;
   SingleStoreWidget({Key key, this.data}) : super(key: key);
 
-  @override
-  _SingleProductWidgetState createState() => _SingleProductWidgetState();
-}
-
-class _SingleProductWidgetState extends State<SingleStoreWidget> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -29,7 +24,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
           children: [
             CachedNetworkImage(
               placeholderFadeInDuration: Duration(milliseconds: 200),
-              imageUrl: this.widget.data['avatar'],
+              imageUrl: this.data['avatar'],
               imageBuilder: (context, imageProvider) => Center(
                 child: Container(
                   width: width * 0.6,
@@ -58,7 +53,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                'В нашем магазине с ${(this.widget.data['createdAt'].toString().substring(0, 10))}',
+                'В нашем магазине с ${(this.data['createdAt'].toString().substring(0, 10))}',
                 style: TextStyle(
                   fontSize: 10.0.sp,
                 ),
@@ -67,7 +62,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: RatingBarIndicator(
-                rating: this.widget.data['rating'] ?? 4,
+                rating: this.data['rating'] ?? 4,
                 itemBuilder: (context, index) => Icon(
                   Icons.star_rounded,
                   color: AppStyle.colorPurple,
@@ -98,7 +93,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
                   InkWell(
                     borderRadius: BorderRadius.circular(10),
                     onTap: () {
-                      launchURL('tel:${this.widget.data['phone']}');
+                      launchURL('tel:${this.data['phone']}');
                     },
                     child: Ink(
                       width: double.infinity,
@@ -116,7 +111,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
                           ]),
                       child: Center(
                         child: Text(
-                          '${this.widget.data['phone']}',
+                          '${this.data['phone']}',
                           style: TextStyle(
                             fontSize: 12.0.sp,
                           ),
@@ -141,8 +136,7 @@ class _SingleProductWidgetState extends State<SingleStoreWidget> {
                             color: Colors.grey[300],
                           )
                         ]),
-                    child:
-                        Center(child: Text('${this.widget.data['address']}')),
+                    child: Center(child: Text('${this.data['address']}')),
                   ),
                   SizedBox(
                     height: 3.0.h,

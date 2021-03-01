@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:green_go/components/styles/app_style.dart';
+import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class ListCustomItem extends StatelessWidget {
   final String title;
   final String path;
   final Function onTapped;
-  final int notificationCount;
-  const ListCustomItem(
-      {Key key, this.path, this.notificationCount, this.title, this.onTapped})
-      : super(key: key);
+
+  final Future getNotification;
+  const ListCustomItem({
+    Key key,
+    this.path,
+    this.title,
+    this.onTapped,
+    this.getNotification,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +54,31 @@ class ListCustomItem extends StatelessWidget {
               ),
             ),
             Spacer(),
-            this.notificationCount != null
+            this.getNotification != null
                 ? Padding(
                     padding: EdgeInsets.only(right: 3.0.w),
-                    child: Text(
-                      '4',
-                      style: TextStyle(
-                        fontSize: 13.0.sp,
-                        color: AppStyle.colorPurple,
-                      ),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    child: FutureBuilder(
+                        future: this.getNotification,
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.data == null)
+                            return const Center(
+                              child: SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: LoaderWidget(),
+                              ),
+                            );
+                          return Text(
+                            snapshot.data['data']['count'].toString(),
+                            style: TextStyle(
+                              fontSize: 13.0.sp,
+                              color: AppStyle.colorPurple,
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          );
+                        }),
                   )
                 : const SizedBox(),
           ],

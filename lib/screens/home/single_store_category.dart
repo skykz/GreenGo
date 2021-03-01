@@ -31,10 +31,17 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
   Future getShowcaseProducts;
 
   @override
+  void initState() {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    homeProvider.setClearTopProducts();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     dynamic dataStore = ModalRoute.of(context).settings.arguments;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    inspect("ID -> ${dataStore['id']}");
+    inspect("ID -> $dataStore");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -109,7 +116,7 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
                   future: homeProvider.getTopProducts(
                       context,
                       this.widget.isStore ? dataStore['id'] : null,
-                      dataStore['id']),
+                      this.widget.isStore ? null : dataStore['id']),
                 ),
               ],
             ),
@@ -295,21 +302,18 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
                           context,
                           currentSelectedValue,
                           this.widget.isStore ? dataStore['id'] : null,
-                          provider.getSelectedCategoryId == null
-                              ? dataStore['id']
-                              : provider.getSelectedCategoryId),
+                          provider.getSelectedCategoryId ?? null),
                     )
                   : FutureBuilder(
                       future: homeProvider.getWindowProducts(
-                          context,
-                          currentSelectedValue,
-                          this.widget.isStore ? dataStore['id'] : null,
-                          provider.getSelectedCategoryId == null
-                              ? dataStore['id']
-                              : provider.getSelectedCategoryId),
+                        context,
+                        currentSelectedValue,
+                        this.widget.isStore ? dataStore['id'] : null,
+                        provider.getSelectedCategoryId ?? null,
+                      ),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (snapshot.data == null)
-                          return Center(child: const LoaderWidget());
+                          return const Center(child: LoaderWidget());
                         return ListView.builder(
                           itemCount: snapshot.data['data'].length,
                           shrinkWrap: true,

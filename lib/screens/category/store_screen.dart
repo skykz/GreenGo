@@ -68,6 +68,7 @@ class ListStoreCatergoryScreen extends StatelessWidget {
                       return Center(child: const LoaderWidget());
                     return ListView.builder(
                       itemCount: snapshot.data['data'].length,
+                      padding: const EdgeInsets.only(bottom: 30),
                       shrinkWrap: true,
                       itemBuilder: (BuildContext context, int index) {
                         return Center(

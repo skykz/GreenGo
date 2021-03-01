@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:green_go/core/api/repositories/api_repo.dart';
 import 'package:green_go/core/data/dialog_type.dart';
 import 'package:green_go/utils/utils.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'base_provider.dart';
@@ -27,6 +28,11 @@ class HomeProvider extends BaseProvider {
   int _selectedCategoryId;
   int get getSelectedCategoryId => this._selectedCategoryId;
 
+  int _page = 0;
+
+  List<dynamic> _topProductsList = List();
+  List<dynamic> get getTopProductsList => _topProductsList;
+
   void setSelectedCategoryIndex(int val) {
     this._selectedCategoryIndex = val;
     notifyListeners();
@@ -39,6 +45,7 @@ class HomeProvider extends BaseProvider {
 
   void setSelectedIndex(int val) {
     this._selectedIndex = val;
+    setClearTopProducts();
     notifyListeners();
   }
 
@@ -56,13 +63,18 @@ class HomeProvider extends BaseProvider {
     if (_phone.length >= 11 && _pinCode.length >= 5) {
       setLoadingState(true);
       _greenGoApi.authLogin(_phone, _pinCode, context).then((value) {
-        setAccessToken(value['data']['token']);
-        showCustomSnackBar(context, 'Вы успешно авторизовались!', Colors.green,
-            Icons.check_rounded);
-        Future.delayed(
-          const Duration(milliseconds: 1300),
-          () => Navigator.pop(context),
-        );
+        if (value != null) {
+          setAccessToken(value['data']['token']);
+          setUserInfo(value['data']['user']['username'],
+              value['data']['user']['phone'], value['data']['user']['avatar']);
+
+          showCustomSnackBar(context, 'Вы успешно авторизовались!',
+              Colors.green, Icons.check_rounded);
+          Future.delayed(
+            const Duration(milliseconds: 1300),
+            () => Navigator.pop(context),
+          );
+        }
       }).whenComplete(() => setLoadingState(false));
     } else {
       showCustomSnackBar(context, 'Неправильный формат номера!',
@@ -94,8 +106,6 @@ class HomeProvider extends BaseProvider {
   confirmRegisterBySmsCode(
       BuildContext context, String _smsCode, String _phone) {
     if (_smsCode != null && _phone != null) {
-      inspect(_smsCode);
-      inspect(_phone);
       setLoadingState(true);
       _greenGoApi.finishRegisterByCode(_smsCode, _phone, context).then((value) {
         if (value != null) {
@@ -103,6 +113,10 @@ class HomeProvider extends BaseProvider {
             _pageController.animateToPage(3,
                 duration: Duration(milliseconds: 300), curve: Curves.easeIn);
             setAccessToken(value['data']['token']);
+            setUserInfo(
+                value['data']['user']['username'],
+                value['data']['user']['phone'],
+                value['data']['user']['avatar']);
           }
         }
       }).whenComplete(() => setLoadingState(false));
@@ -163,13 +177,33 @@ class HomeProvider extends BaseProvider {
     await _prefs.setString('accessToken', _token);
   }
 
-  Future getTopProducts(BuildContext context,
+  setUserInfo(String _fullName, String _phone, String _avatar) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString('fullName', _fullName);
+    await _prefs.setString('phone', _phone);
+    await _prefs.setString('avatar', _avatar);
+  }
+
+  Future getTopProducts(BuildContext context, RefreshController _refresh,
       [int storeId, int categoryId]) async {
-    return await _greenGoApi.getTopProducts(
+    return await _greenGoApi
+        .getTopProducts(
+      this._page,
       storeId,
       categoryId,
       context,
-    );
+    )
+        .then((value) {
+      if (value != null) {
+        if (value['data'].length > 0) {
+          this._topProductsList.addAll(value['data']);
+          this._page++;
+          notifyListeners();
+        } else {
+          _refresh.loadNoData();
+        }
+      }
+    });
   }
 
   Future getWindowProducts(BuildContext context,
@@ -179,7 +213,7 @@ class HomeProvider extends BaseProvider {
     inspect(categoryId);
 
     return await _greenGoApi.getWindowProducts(
-        sort, storeId, categoryId, context);
+        sort, storeId, categoryId, null, context);
   }
 
   Future getCatalogsProducts(BuildContext context,
@@ -322,7 +356,6 @@ class HomeProvider extends BaseProvider {
   setNewAddress(
       int _addId, String _value, bool _isMain, BuildContext context) async {
     setLoadingState(true);
-
     _greenGoApi
         .setNewAddressStatus(_addId, _value, _isMain, context)
         .whenComplete(() => setLoadingState(false));
@@ -378,5 +411,35 @@ class HomeProvider extends BaseProvider {
         showCustomSnackBar(
             context, value['message'], Colors.green, Icons.check_rounded);
     }).whenComplete(() => setLoadingState(false));
+  }
+
+  addNewAddress(String _street, String _arpt, String _podest,
+      String _aprtNumber, BuildContext context) async {
+    showCustomSnackBar(
+        context, "Загрузка...", Colors.green, Icons.autorenew_rounded);
+    return await _greenGoApi
+        .addNewAddress(_street + _arpt + _podest + _aprtNumber)
+        .then((value) {
+      if (value != null)
+        showCustomSnackBar(
+            context, value['message'], Colors.green, Icons.check_rounded);
+    });
+  }
+
+  deleteAddress(int _id, BuildContext context) async {
+    setLoadingState(true);
+    _greenGoApi.deleteAddress(_id, context).then((value) {
+      if (value != null)
+        showCustomSnackBar(
+            context, value['message'], Colors.green, Icons.check_rounded);
+
+      Navigator.pushReplacementNamed(context, '/settings');
+    }).whenComplete(() => setLoadingState(false));
+  }
+
+  setClearTopProducts() {
+    this._page = 0;
+    this._topProductsList.clear();
+    notifyListeners();
   }
 }

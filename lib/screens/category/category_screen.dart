@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:green_go/components/widgets/loader_widget.dart';
 import 'package:green_go/components/widgets/long_card_widget.dart';
@@ -46,24 +44,56 @@ class ListCatergoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     dynamic selfArgument = ModalRoute.of(context).settings.arguments;
-    inspect(selfArgument);
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(20),
-            child: Center(
-              child: Text(
-                selfArgument == null ? "КАТЕГОРИИ" : "ПОДКАТЕГОРИИ",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16.0.sp,
+          selfArgument != null
+              ? Container(
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 20.0.sp,
+                          color: Colors.purple[400],
+                        ),
+                        onPressed: () => Navigator.maybePop(context),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: width * 0.14),
+                        child: Container(
+                          color: Colors.white,
+                          padding: const EdgeInsets.all(16),
+                          child: Center(
+                            child: Text(
+                              "ПОДКАТЕГОРИИ",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0.sp,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.white,
+                  child: Center(
+                    child: Text(
+                      selfArgument == null ? "КАТЕГОРИИ" : "ПОДКАТЕГОРИИ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15.0.sp,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
           Consumer<HomeProvider>(builder: (context, provider, _) {
             return FutureBuilder(
                 future: provider.getCatalogsProducts(
@@ -116,8 +146,7 @@ class ListCatergoryScreen extends StatelessWidget {
                                       if (selfArgument == null) {
                                         if (snapshot.data['data'][index]
                                             ['isParent']) {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/',
+                                          Navigator.pushNamed(context, '/',
                                               arguments: snapshot.data['data']
                                                   [index]);
                                         }

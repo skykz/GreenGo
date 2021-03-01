@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -127,7 +128,8 @@ class GreenGoApi {
     return response;
   }
 
-  Future<dynamic> getWindowProducts(String sort, int storeId, int categoryId,
+  Future<dynamic> getWindowProducts(
+      String sort, int storeId, int categoryId, int page,
       [BuildContext context]) async {
     dynamic response = await _networkCall.doRequestAuth(
       path: GET_PRODUCT,
@@ -137,13 +139,18 @@ class GreenGoApi {
         if (storeId != null) 'filter[storeId]': storeId,
         if (categoryId != null) 'filter[categoryId]': categoryId,
         if (sort != null) 'sort[]': sort,
+        if (page != null) 'page': page,
       },
     );
     return response;
   }
 
-  Future<dynamic> getTopProducts(
+  Future<dynamic> getTopProducts(int page,
       [int storeId, int categoryId, BuildContext context]) async {
+    log("message storId => $storeId");
+    log("message => $categoryId");
+    log("page index => $page");
+
     dynamic response = await _networkCall.doRequestAuth(
         path: GET_PRODUCT,
         method: 'GET',
@@ -152,6 +159,7 @@ class GreenGoApi {
           'sort[]': 'salesCount,desc',
           if (storeId != null) 'filter[storeId]': storeId,
           if (categoryId != null) 'filter[categoryId]': categoryId,
+          if (page != null) 'page': page,
         });
     return response;
   }
@@ -317,6 +325,15 @@ class GreenGoApi {
     return response;
   }
 
+  Future<dynamic> createUserAddress(String _value,
+      [BuildContext context]) async {
+    dynamic response = await _networkCall
+        .doRequestMain(path: ADDRESS, method: 'POST', context: context, body: {
+      "value": _value,
+    });
+    return response;
+  }
+
   Future<dynamic> uploadImage(File _file, [BuildContext context]) async {
     String fileName = _file.path.split('/').last;
     dynamic formData = FormData.fromMap({
@@ -395,6 +412,27 @@ class GreenGoApi {
     dynamic response = await _networkCall.doRequestMain(
       path: GET_MY_SELLS,
       method: 'GET',
+      context: context,
+    );
+    return response;
+  }
+
+  Future<dynamic> addNewAddress(String _address, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: ADDRESS,
+      method: 'POST',
+      context: context,
+      body: {
+        "value": _address,
+      },
+    );
+    return response;
+  }
+
+  Future<dynamic> deleteAddress(int _id, [BuildContext context]) async {
+    dynamic response = await _networkCall.doRequestMain(
+      path: ADDRESS + '/$_id',
+      method: 'DELETE',
       context: context,
     );
     return response;

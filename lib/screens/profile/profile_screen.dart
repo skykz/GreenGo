@@ -1,10 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:green_go/components/styles/app_style.dart';
+import 'package:green_go/core/provider/home_provider.dart';
+import 'package:green_go/utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key key}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  PickedFile _imageFile;
+  List<int> _imageIds = List();
+
+  bool isChecked = false;
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +35,40 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 7,
-                          offset: Offset(0, 7),
-                          color: Colors.grey[300],
-                        ),
-                      ]),
-                  child: SvgPicture.asset(
-                    'assets/images/svg/profile_image.svg',
-                    height: 16.0.h,
+                Builder(
+                  builder: (ctx) => InkWell(
+                    onTap: () =>
+                        _onImageButtonPressed(ImageSource.gallery, ctx),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Ink(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 7,
+                              offset: Offset(0, 7),
+                              color: Colors.grey[300],
+                            ),
+                          ]),
+                      child: _imageFile == null
+                          ? SvgPicture.asset(
+                              'assets/images/svg/profile_image.svg',
+                              height: 16.0.h,
+                            )
+                          : SizedBox(
+                              height: 100,
+                              width: 100,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.file(
+                                  File(_imageFile.path),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                    ),
                   ),
                 ),
                 Padding(
@@ -163,5 +200,32 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _onImageButtonPressed(ImageSource source, BuildContext ctx) async {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+
+    final _pickedFile = await _picker.getImage(
+      source: source,
+      imageQuality: 80,
+    );
+
+    homeProvider.uploadImageItem(File(_pickedFile.path), context).then((value) {
+      if (value != null) {
+        _imageIds.add(value['data']['id']);
+      }
+    });
+    if (_pickedFile != null) {
+      setState(() {
+        _imageFile = _pickedFile;
+      });
+    } else {
+      showCustomSnackBar(
+        ctx,
+        'Изображение не выбрано!',
+        Colors.red,
+        Icons.error_outline_rounded,
+      );
+    }
   }
 }

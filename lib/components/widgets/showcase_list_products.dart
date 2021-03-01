@@ -1,23 +1,35 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:green_go/components/styles/app_style.dart';
+import 'package:green_go/core/provider/home_provider.dart';
 import 'package:green_go/screens/home/single_product.dart';
+import 'package:provider/provider.dart';
 
 import 'loader_widget.dart';
 
-class ShowcaseListProducts extends StatelessWidget {
+class ShowcaseListProducts extends StatefulWidget {
   final Future future;
-  const ShowcaseListProducts({Key key, this.future}) : super(key: key);
+  final ScrollController scrollController;
+  ShowcaseListProducts({Key key, this.future, this.scrollController})
+      : super(key: key);
 
+  @override
+  _ShowcaseListProductsState createState() => _ShowcaseListProductsState();
+}
+
+class _ShowcaseListProductsState extends State<ShowcaseListProducts> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: future,
+        future: widget.future,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) return Center(child: const LoaderWidget());
           return GridView.builder(
             itemCount: snapshot.data['data'].length,
             shrinkWrap: true,
+            addAutomaticKeepAlives: true,
             padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             physics: NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -121,5 +133,11 @@ class ShowcaseListProducts extends StatelessWidget {
             },
           );
         });
+  }
+
+  @override
+  void dispose() {
+    // _refreshController?.dispose();
+    super.dispose();
   }
 }

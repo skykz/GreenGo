@@ -38,9 +38,10 @@ class ProductListScreen extends StatelessWidget {
               );
             if (snapshot.data['data'].length == 0)
               return const Center(
-                child: Text('Нету товаров'),
+                child: Text('Нет товаров'),
               );
             return ListView.builder(
+                shrinkWrap: true,
                 itemCount: snapshot.data['data'].length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(

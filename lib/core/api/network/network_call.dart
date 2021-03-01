@@ -41,8 +41,8 @@ class NetworkCall {
       response =
           await dio.request(path, queryParameters: requestParams, data: body);
 
-      log(" - Response - ", name: " api route -- $path");
-      print(' ==== RESPONSE: $response');
+      // log(" - Response - ", name: " api route -- $path");
+      // print(' ==== RESPONSE: $response');
 
       _decodedRes = _decoder.convert(response.toString());
       return _decodedRes;
@@ -79,6 +79,8 @@ class NetworkCall {
           await dio.request(path, queryParameters: requestParams, data: body);
 
       log(" - Response - ", name: " api route -- $path");
+      print(response);
+
       return response.data;
     } on DioError catch (error) {
       // print(' --- req main errors +++++++++ $error');
