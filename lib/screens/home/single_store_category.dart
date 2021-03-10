@@ -41,7 +41,7 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
   Widget build(BuildContext context) {
     dynamic dataStore = ModalRoute.of(context).settings.arguments;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    inspect("ID -> $dataStore");
+    log("ID -> $dataStore");
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -148,7 +148,6 @@ class _SingleHomeScreenState extends State<SingleCategoryStoreHomeScreen> {
                         setState(() {
                           currentSelectedValue = newValue;
                         });
-                        inspect(newValue);
                       },
                       items: sortTypes.entries
                           .map(

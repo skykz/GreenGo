@@ -28,10 +28,22 @@ class HomeProvider extends BaseProvider {
   int _selectedCategoryId;
   int get getSelectedCategoryId => this._selectedCategoryId;
 
-  int _page = 0;
+  int _pageIndexTop = 0;
+  int _pageIndexWindow = 0;
 
   List<dynamic> _topProductsList = List();
   List<dynamic> get getTopProductsList => _topProductsList;
+
+  List<dynamic> _windowProductsList = List();
+  List<dynamic> get getWindowProductsList => _windowProductsList;
+
+  bool isWindowProductsLoading = false;
+  bool get getWindowProductsLoading => isWindowProductsLoading;
+
+  void setWindowProductsLoaded(bool val) {
+    this.isWindowProductsLoading = val;
+    notifyListeners();
+  }
 
   void setSelectedCategoryIndex(int val) {
     this._selectedCategoryIndex = val;
@@ -188,7 +200,7 @@ class HomeProvider extends BaseProvider {
       [int storeId, int categoryId]) async {
     return await _greenGoApi
         .getTopProducts(
-      this._page,
+      this._pageIndexTop,
       storeId,
       categoryId,
       context,
@@ -197,7 +209,7 @@ class HomeProvider extends BaseProvider {
       if (value != null) {
         if (value['data'].length > 0) {
           this._topProductsList.addAll(value['data']);
-          this._page++;
+          this._pageIndexTop++;
           notifyListeners();
         } else {
           _refresh.loadNoData();
@@ -212,8 +224,17 @@ class HomeProvider extends BaseProvider {
     inspect(storeId);
     inspect(categoryId);
 
-    return await _greenGoApi.getWindowProducts(
-        sort, storeId, categoryId, null, context);
+    return await _greenGoApi
+        .getWindowProducts(sort, storeId, categoryId, null, context)
+        .then((value) {
+      if (value != null) {
+        if (value['data'].length > 0) {
+          this._windowProductsList.addAll(value['data']);
+          this._pageIndexWindow++;
+          notifyListeners();
+        }
+      }
+    });
   }
 
   Future getCatalogsProducts(BuildContext context,
@@ -438,8 +459,10 @@ class HomeProvider extends BaseProvider {
   }
 
   setClearTopProducts() {
-    this._page = 0;
+    this._pageIndexTop = 0;
+    this._pageIndexWindow = 0;
     this._topProductsList.clear();
+    this._windowProductsList.clear();
     notifyListeners();
   }
 }

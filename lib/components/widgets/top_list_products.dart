@@ -39,8 +39,6 @@ class _ListTopProductsState extends State<ListTopProducts> {
         if (provider.getTopProductsList.isEmpty)
           return Center(child: const LoaderWidget());
 
-        // log('${provider.getTopProductsList}');
-        inspect(provider.getTopProductsList);
         return SmartRefresher(
             enablePullDown: false,
             enablePullUp: true,

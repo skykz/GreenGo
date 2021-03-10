@@ -58,68 +58,71 @@ class _CardMainScreenState extends State<CardMainScreen>
   @override
   Widget build(BuildContext context) {
     final homeProvder = Provider.of<HomeProvider>(context);
-    return NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return [
-          SliverAppBar(
-            pinned: false,
-            toolbarHeight: 10,
-            backgroundColor: Colors.white,
-            bottom: TabBar(
-              unselectedLabelColor: const Color(0xff9E1AEF),
-              indicatorSize: TabBarIndicatorSize.label,
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: const Color(0xff9E1AEF),
+    return Scrollbar(
+      child: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              pinned: false,
+              toolbarHeight: 10,
+              backgroundColor: Colors.white,
+              bottom: TabBar(
+                unselectedLabelColor: const Color(0xff9E1AEF),
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: const Color(0xff9E1AEF),
+                ),
+                tabs: [
+                  Tab(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                            color: const Color(0xff9E1AEF), width: 1),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 13),
+                          child: FittedBox(child: const Text("КОРЗИНА")),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Tab(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: Color(0xff9E1AEF),
+                          width: 1,
+                        ),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 13),
+                          child:
+                              FittedBox(child: const Text('ИСТОРИЯ ЗАКАЗОВ')),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+                controller: controller,
               ),
-              tabs: [
-                Tab(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border:
-                          Border.all(color: const Color(0xff9E1AEF), width: 1),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 13),
-                        child: FittedBox(child: const Text("КОРЗИНА")),
-                      ),
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: Color(0xff9E1AEF),
-                        width: 1,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 13),
-                        child: FittedBox(child: const Text('ИСТОРИЯ ЗАКАЗОВ')),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-              controller: controller,
-            ),
-          )
-        ];
-      },
-      body: TabBarView(
-        controller: controller,
-        physics: const NeverScrollableScrollPhysics(),
-        children: [
-          _cartListWidget(context, homeProvder),
-          CartsHistoryItemScreen(),
-        ],
+            )
+          ];
+        },
+        body: TabBarView(
+          controller: controller,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            _cartListWidget(context, homeProvder),
+            CartsHistoryItemScreen(),
+          ],
+        ),
       ),
     );
   }

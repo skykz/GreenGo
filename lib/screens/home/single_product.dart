@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -35,7 +34,9 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     getSingleProduct = homeProvider.getSingleProduct(
         this.widget.singleProductData['id'], context);
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      homeProvider.setClearTopProducts();
+    });
     super.initState();
   }
 
@@ -48,7 +49,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: PreferredSize(
@@ -72,7 +72,6 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.data == null)
                 return Center(child: const LoaderWidget());
-              inspect(snapshot.data);
               return Column(
                 children: [
                   Column(

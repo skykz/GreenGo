@@ -262,7 +262,6 @@ class _IndexScreenState extends State<IndexScreen> {
                 FocusScope.of(context).unfocus();
                 if (ind == 4) {
                   homeProvder.getAccessToken().then((value) {
-                    inspect(value);
                     if (value == null)
                       displayCustomDialog(
                           context, '_title', DialogType.AuthType, true, () {});

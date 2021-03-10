@@ -41,8 +41,14 @@ class NotificationHandlerService {
       iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
         // save the token  OR subscribe to a topic here
       });
-
-      _fcm.requestNotificationPermissions(IosNotificationSettings());
+      _fcm.getToken().then((value) => log('$value'));
+      _fcm.requestNotificationPermissions(
+        IosNotificationSettings(
+          sound: true,
+          badge: true,
+          alert: true,
+        ),
+      );
     }
     _fcm.getToken().then((value) => log('$value'));
     _fcm.configure(
